@@ -62,6 +62,16 @@ const config: Config = {
         },
       },
       keyframes: {
+        wave: {
+          '0%, 100%': { transform: 'translateY(0)' },
+          '50%': { transform: 'translateY(-5%)' },
+        },
+        bubble: {
+          '0%': { transform: 'translateY(100vh) scale(0)' },
+          '50%': { transform: 'translateY(50vh) scale(1)' },
+          '100%': { transform: 'translateY(0) scale(0)' },
+        },
+
         'accordion-down': {
           from: {
             height: '0',
@@ -80,8 +90,12 @@ const config: Config = {
         },
       },
       animation: {
-        'accordion-down': 'accordion-down 0.2s ease-out',
-        'accordion-up': 'accordion-up 0.2s ease-out',
+        'wave-slow': 'wave 7s ease-in-out infinite',
+        'wave-normal': 'wave 5s ease-in-out infinite',
+        'wave-fast': 'wave 3s ease-in-out infinite',
+        'bubble': 'bubble 8s ease-in-out infinite',
+        'bubble-fast': 'bubble 5s ease-in-out infinite', // Added faster bubble animation
+   
       },
     },
   },

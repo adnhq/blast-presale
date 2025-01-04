@@ -36,14 +36,14 @@ const phases = [
 const TimelineNode = ({ status }) => {
   if (status === "completed") {
     return (
-      <div className="w-8 h-8 rounded-full bg-gradient-to-r from-green-500 to-emerald-600 flex items-center justify-center">
+      <div className="w-8 h-8 rounded-full bg-gradient-to-r from-blue-400 to-cyan-500 flex items-center justify-center">
         <CheckCircle2 className="w-5 h-5 text-white" />
       </div>
     );
   }
   if (status === "in-progress") {
     return (
-      <div className="w-8 h-8 rounded-full bg-gradient-to-r from-purple-500 to-pink-600 animate-pulse" />
+      <div className="w-8 h-8 rounded-full bg-gradient-to-r from-blue-400 to-cyan-500 animate-pulse" />
     );
   }
   return (
@@ -75,7 +75,7 @@ export default function Roadmap() {
                 >
                   <div className="p-6">
                     <div className="flex justify-between items-start mb-4">
-                      <h3 className="text-2xl font-bold bg-gradient-to-r from-pink-500 to-purple-500 text-transparent bg-clip-text">
+                      <h3 className="text-2xl font-bold bg-gradient-to-r from-blue-400 to-cyan-500 text-transparent bg-clip-text">
                         {phase.title}
                       </h3>
                       <Icon className={`w-6 h-6 ${

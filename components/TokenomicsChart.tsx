@@ -1,21 +1,12 @@
 import React, { useState } from 'react';
-import { Card } from "@/components/ui/card";
-import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Sector } from "recharts";
+import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Sector } from 'recharts';
 
 const COLORS = [
-  'from-pink-500 to-rose-600',
-  'from-violet-500 to-purple-600',
-  'from-blue-500 to-indigo-600',
-  'from-emerald-400 to-teal-500',
-  'from-amber-400 to-orange-500'
-];
-
-const SOLID_COLORS = [
-  '#EC4899',
-  '#8B5CF6',
-  '#3B82F6',
-  '#10B981',
-  '#F59E0B'
+  '#3B82F6', // Blue
+  '#6366F1', // Indigo
+  '#8B5CF6', // Purple
+  '#A855F7', // Violet
+  '#EC4899'  // Pink
 ];
 
 const data = [
@@ -30,12 +21,10 @@ const CustomTooltip = ({ active, payload }) => {
   if (active && payload && payload.length) {
     const data = payload[0].payload;
     return (
-      <div className="bg-black/90 backdrop-blur-lg p-6 rounded-xl border border-gray-800 shadow-xl">
-        <p className="text-xl font-bold bg-gradient-to-r from-pink-500 to-purple-500 bg-clip-text text-transparent">
-          {data.name}
-        </p>
-        <p className="text-3xl font-bold mt-1">{data.value}%</p>
-        <p className="text-gray-300 mt-2 text-sm">{data.description}</p>
+      <div className="bg-white/10 backdrop-blur-md p-4 rounded-lg border border-white/20">
+        <p className="font-bold text-lg">{data.name}</p>
+        <p className="text-2xl font-bold text-blue-400">{data.value}%</p>
+        <p className="text-sm text-gray-300 mt-1">{data.description}</p>
       </div>
     );
   }
@@ -44,14 +33,13 @@ const CustomTooltip = ({ active, payload }) => {
 
 const renderActiveShape = (props) => {
   const { cx, cy, innerRadius, outerRadius, startAngle, endAngle, fill } = props;
-
   return (
     <g>
       <Sector
         cx={cx}
         cy={cy}
         innerRadius={innerRadius}
-        outerRadius={outerRadius + 8}
+        outerRadius={outerRadius + 4}
         startAngle={startAngle}
         endAngle={endAngle}
         fill={fill}
@@ -63,7 +51,6 @@ const renderActiveShape = (props) => {
 
 export default function TokenomicsChart() {
   const [activeIndex, setActiveIndex] = useState(null);
-  const [rotateAngle, setRotateAngle] = useState(0);
 
   const onPieEnter = (_, index) => {
     setActiveIndex(index);
@@ -74,72 +61,86 @@ export default function TokenomicsChart() {
   };
 
   return (
-    <Card className="bg-gradient-to-br from-gray-900 via-gray-900 to-gray-800 p-8 max-w-4xl mx-auto border-gray-800 shadow-2xl">
-      <div className="text-center mb-12 relative">
-        <div className="absolute inset-0 bg-gradient-to-r from-pink-500/20 to-purple-500/20 blur-3xl -z-10" />
-        <h3 className="text-4xl font-bold mb-4 bg-gradient-to-r from-pink-500 to-purple-500 text-transparent bg-clip-text">
+    <div className="w-full">
+      {/* Total Supply Section */}
+      <div className="text-center mb-8">
+        <h3 className="text-2xl md:text-4xl font-bold mb-2">
           Total Supply
         </h3>
-        <p className="text-6xl font-bold tracking-tight">
+        <p className="text-4xl md:text-6xl font-bold text-blue-400">
           10,000,000,000
         </p>
-        <p className="text-xl text-gray-400 mt-4 font-medium">$BLAST Tokens</p>
+        <p className="text-lg md:text-xl text-gray-400 mt-2">
+          $BLAST Tokens
+        </p>
       </div>
-      
-      <div className="grid md:grid-cols-2 gap-12 items-center">
-        <div className="h-96">
-          <ResponsiveContainer width="100%" height="100%">
-            <PieChart>
-              <Pie
-                data={data}
-                cx="50%"
-                cy="50%"
-                innerRadius={80}
-                outerRadius={120}
-                paddingAngle={8}
-                dataKey="value"
-                onMouseEnter={onPieEnter}
-                onMouseLeave={onPieLeave}
-                activeIndex={activeIndex}
-                activeShape={renderActiveShape}
-                startAngle={90 + rotateAngle}
-                endAngle={450 + rotateAngle}
-              >
-                {data.map((entry, index) => (
-                  <Cell 
-                    key={`cell-${index}`} 
-                    fill={SOLID_COLORS[index]}
-                    className="transition-all duration-300 cursor-pointer drop-shadow-lg"
-                  />
-                ))}
-              </Pie>
-              <Tooltip content={<CustomTooltip />} />
-            </PieChart>
-          </ResponsiveContainer>
+
+      {/* Chart and Legend Container */}
+      <div className="flex flex-col lg:flex-row gap-8 items-center lg:items-start">
+        {/* Chart Section */}
+        <div className="w-full lg:w-1/2">
+          <div className="h-[300px] md:h-[400px]">
+            <ResponsiveContainer width="100%" height="100%">
+              <PieChart>
+                <Pie
+                  data={data}
+                  cx="50%"
+                  cy="50%"
+                  innerRadius={60}
+                  outerRadius={90}
+                  paddingAngle={4}
+                  dataKey="value"
+                  onMouseEnter={onPieEnter}
+                  onMouseLeave={onPieLeave}
+                  activeIndex={activeIndex}
+                  activeShape={renderActiveShape}
+                >
+                  {data.map((entry, index) => (
+                    <Cell 
+                      key={`cell-${index}`} 
+                      fill={COLORS[index]}
+                      className="transition-all duration-300 cursor-pointer"
+                    />
+                  ))}
+                </Pie>
+                <Tooltip content={<CustomTooltip />} />
+              </PieChart>
+            </ResponsiveContainer>
+          </div>
         </div>
-        
-        <div className="space-y-4">
+
+        {/* Legend Section */}
+        <div className="w-full lg:w-1/2 space-y-3">
           {data.map((item, index) => (
             <div 
-              key={item.name} 
-              className={`flex items-center gap-4 p-4 rounded-xl transition-all duration-300
-                ${activeIndex === index ? 'bg-white/10 scale-105' : 'hover:bg-white/5'}
-                cursor-pointer backdrop-blur-sm`}
+              key={item.name}
+              className={`flex items-center gap-4 p-3 rounded-lg transition-all duration-300
+                ${activeIndex === index ? 'bg-white/5 scale-[1.02]' : 'hover:bg-white/5'}
+                cursor-pointer`}
               onMouseEnter={() => setActiveIndex(index)}
               onMouseLeave={() => setActiveIndex(null)}
             >
-              <div className={`w-4 h-4 rounded-full bg-gradient-to-r ${COLORS[index]}`} />
-              <div className="flex-1">
-                <div className="flex justify-between items-center">
-                  <span className="font-semibold text-lg">{item.name}</span>
-                  <span className="font-bold text-xl">{item.value}%</span>
+              <div 
+                className="w-4 h-4 rounded-full shrink-0"
+                style={{ backgroundColor: COLORS[index] }}
+              />
+              <div className="flex-1 min-w-0">
+                <div className="flex justify-between items-center gap-4">
+                  <span className="font-medium text-base md:text-lg truncate">
+                    {item.name}
+                  </span>
+                  <span className="font-bold text-lg md:text-xl text-blue-400 shrink-0">
+                    {item.value}%
+                  </span>
                 </div>
-                <p className="text-gray-400 mt-1">{item.description}</p>
+                <p className="text-gray-400 text-sm mt-0.5 truncate">
+                  {item.description}
+                </p>
               </div>
             </div>
           ))}
         </div>
       </div>
-    </Card>
+    </div>
   );
 }

@@ -29,20 +29,54 @@ export default function CountdownTimer() {
     return () => clearInterval(timer);
   }, []);
 
+  const getStrokeDasharray = (value: number, max: number) => {
+    const percentage = (value / max) * 100;
+    return `${percentage} ${100 - percentage}`;
+  };
+
   return (
-    <div className="flex gap-4 justify-center">
-      {Object.entries(timeLeft).map(([label, value]) => (
-        <div key={label} className="flex flex-col items-center">
-          <div className="bg-white/5 rounded-lg w-16 h-16 flex items-center justify-center border border-white/10">
-            <span className="text-2xl font-medium">
-              {value.toString().padStart(2, '0')}
+    <div className="flex flex-wrap gap-6 justify-center">
+      {Object.entries(timeLeft).map(([label, value]) => {
+        const max = label === 'days' ? 7 : label === 'hours' ? 24 : 60;
+        return (
+          <div key={label} className="flex flex-col items-center">
+            <div className="relative w-24 h-24">
+              <svg className="w-full h-full -rotate-90" viewBox="0 0 100 100">
+                <circle
+                  className="text-gray-200"
+                  strokeWidth="4"
+                  stroke="currentColor"
+                  fill="transparent"
+                  r="45"
+                  cx="50"
+                  cy="50"
+                />
+                <circle
+                  className="text-primary"
+                  strokeWidth="4"
+                  strokeLinecap="round"
+                  stroke="currentColor"
+                  fill="transparent"
+                  r="45"
+                  cx="50"
+                  cy="50"
+                  strokeDasharray={getStrokeDasharray(value, max)}
+                  strokeDashoffset="0"
+                />
+              </svg>
+              <div className="absolute inset-0 flex items-center justify-center">
+                <span className="text-3xl font-bold">
+                  {value.toString().padStart(2, '0')}
+                </span>
+              </div>
+            </div>
+            <span className="text-sm mt-2 font-medium uppercase tracking-wider">
+              {label}
             </span>
           </div>
-          <span className="text-xs text-white/60 mt-2 font-medium uppercase tracking-wider">
-            {label}
-          </span>
-        </div>
-      ))}
+        );
+      })}
     </div>
   );
 }
+

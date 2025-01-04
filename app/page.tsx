@@ -4,14 +4,14 @@ import BuySection from "@/components/BuySection";
 import TokenomicsChart from "@/components/TokenomicsChart";
 import Roadmap from "@/components/Roadmap";
 import FAQ from "@/components/FAQ";
-
+import Image from 'next/image';
 import { Rocket } from "lucide-react";
+import blastoise from "../public/blastoise-bg.jpeg";
 
 export default function Home() {
   return (
     <div className="space-bg min-h-screen text-white">
-      <div className="hero-gradient">
-        <nav className="border-b border-white/10">
+      <nav className="border-b border-white/10">
           <div className="container mx-auto px-4 py-4 flex justify-between items-center">
             <div className="flex items-center gap-2 text-2xl font-bold">
               <Rocket className="h-8 w-8" />
@@ -27,10 +27,20 @@ export default function Home() {
             </div>
           </div>
         </nav>
+      <div className="relative mb-32 h-[90vh]">
+      <Image
+        src={blastoise}
+        alt="Descriptive text for screen readers"
+        fill
+        className="object-cover"
+      />
+      <div className="relative z-10">
+        
 
         <section id="buy" className="container mx-auto px-4 py-24">
           <BuySection />
         </section>
+        </div>
       </div>
 
       <section id="tokenomics" className="container mx-auto px-4 py-24">

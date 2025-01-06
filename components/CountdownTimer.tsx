@@ -1,5 +1,3 @@
-"use client";
-
 import { useState, useEffect } from "react";
 
 export default function CountdownTimer() {
@@ -35,12 +33,12 @@ export default function CountdownTimer() {
   };
 
   return (
-    <div className="flex flex-wrap gap-6 justify-center">
+    <div className="flex flex-wrap gap-1 md:gap-2 justify-center items-center h-full">
       {Object.entries(timeLeft).map(([label, value]) => {
         const max = label === 'days' ? 7 : label === 'hours' ? 24 : 60;
         return (
           <div key={label} className="flex flex-col items-center">
-            <div className="relative w-24 h-24">
+            <div className="relative w-14 h-14 md:w-16 md:h-16">
               <svg className="w-full h-full -rotate-90" viewBox="0 0 100 100">
                 <circle
                   className="text-gray-200"
@@ -65,12 +63,12 @@ export default function CountdownTimer() {
                 />
               </svg>
               <div className="absolute inset-0 flex items-center justify-center">
-                <span className="text-3xl font-bold">
+                <span className="text-lg md:text-xl font-bold">
                   {value.toString().padStart(2, '0')}
                 </span>
               </div>
             </div>
-            <span className="text-sm mt-2 font-medium uppercase tracking-wider">
+            <span className="text-xs mt-1 font-medium uppercase tracking-wider">
               {label}
             </span>
           </div>
@@ -79,4 +77,3 @@ export default function CountdownTimer() {
     </div>
   );
 }
-

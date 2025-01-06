@@ -10,16 +10,29 @@ import { Droplets, Menu, X } from 'lucide-react';
 import { useState } from "react";
 import blastoise from "../public/pixelcut-export.jpeg";
 import tokenomicsBlastoise from "../public/blastoise-1.png";
-import WaterBackground from "../components/WaterBackground";
+import woodsBg from "../public/potential.jpeg";
+import WaterBackground from "@/components/WaterBackground";
 
 export default function Home() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   return (
-    <div className="space-bg min-h-screen text-white overflow-x-hidden">
-      <WaterBackground />
+    <div className="min-h-screen text-white overflow-x-hidden relative">
+      {/* Nature Background */}
+      <WaterBackground></WaterBackground>
+      <div className="fixed inset-0 w-full h-full z-0">
+        
+        <Image
+          src={woodsBg}
+          alt="Forest background"
+          fill
+          className="object-cover"
+          priority
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/70 to-black/90" />
+      </div>
 
-      <nav className="border-b border-white/10 relative z-50">
+      <nav className="border-b border-white/10 relative z-50 bg-black/50 backdrop-blur-sm">
         <div className="container mx-auto px-4 py-4 flex justify-between items-center">
           <div className="flex items-center gap-2 text-2xl font-bold">
             <Droplets className="h-8 w-8" />
@@ -47,7 +60,7 @@ export default function Home() {
 
         {/* Mobile Navigation */}
         {isMobileMenuOpen && (
-          <div className="md:hidden absolute top-full left-0 right-0 bg-black/95 border-b border-white/10">
+          <div className="md:hidden absolute top-full left-0 right-0 bg-black/95 backdrop-blur-sm border-b border-white/10">
             <div className="container mx-auto px-4 py-4 flex flex-col gap-4">
               <a 
                 href="#buy" 
@@ -92,7 +105,7 @@ export default function Home() {
             className="object-cover"
             priority
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[#000814] pointer-events-none" />
+          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/90 pointer-events-none" />
         </div>
         <div className="absolute inset-0 flex flex-col md:flex-row">
           {/* Left side - empty space for Blastoise */}
@@ -105,40 +118,49 @@ export default function Home() {
         </div>
       </div>
 
-      {/* Rest of the sections */}
-      <section id="tokenomics" className="container mx-auto px-4 py-16 md:py-24">
-        <h2 className="text-3xl md:text-4xl font-bold text-center mb-8 md:mb-12 bg-gradient-to-r from-blue-400 to-cyan-500 text-transparent bg-clip-text">
-          Tokenomics
-        </h2>
-        <div className="flex flex-col md:flex-row gap-8 items-center">
-          <div className="w-full md:w-1/2 relative h-[400px] md:h-[600px]">
-            <Image
-              src={tokenomicsBlastoise}
-              alt="Blastoise Tokenomics"
-              fill
-              className="object-contain"
-            />
+      {/* Content sections with glass morphism effect */}
+      <div className="relative z-10">
+        <section id="tokenomics" className="container mx-auto px-4 py-16 md:py-24">
+          <div className="bg-black/40 backdrop-blur-sm rounded-2xl p-8 border border-white/10">
+            <h2 className="text-3xl md:text-4xl font-bold text-center mb-8 md:mb-12 bg-gradient-to-r from-blue-400 to-cyan-500 text-transparent bg-clip-text">
+              Tokenomics
+            </h2>
+            <div className="flex flex-col md:flex-row gap-8 items-center">
+              <div className="w-full md:w-1/2 relative h-[400px] md:h-[600px]">
+                <Image
+                  src={tokenomicsBlastoise}
+                  alt="Blastoise Tokenomics"
+                  fill
+                  className="object-contain"
+                />
+              </div>
+              <div className="w-full md:w-1/2">
+                <TokenomicsChart />
+              </div>
+            </div>
           </div>
-          <div className="w-full md:w-1/2">
-            <TokenomicsChart />
-          </div>
-        </div>
-      </section>
-      <section id="roadmap" className="container mx-auto px-4 py-16 md:py-24">
-        <h2 className="text-3xl md:text-4xl font-bold text-center mb-12 md:mb-16 bg-gradient-to-r from-blue-400 to-cyan-500 text-transparent bg-clip-text">
-          Roadmap
-        </h2>
-        <Roadmap />
-      </section>
+        </section>
 
-      <section id="faq" className="container mx-auto px-4 py-16 md:py-24">
-        <h2 className="text-3xl md:text-4xl font-bold text-center mb-8 md:mb-12 bg-gradient-to-r from-blue-400 to-cyan-500 text-transparent bg-clip-text">
-          FAQ
-        </h2>
-        <FAQ />
-      </section>
-      <Footer></Footer>
+        <section id="roadmap" className="container mx-auto px-4 py-16 md:py-24">
+          <div className="bg-black/40 backdrop-blur-sm rounded-2xl p-8 border border-white/10">
+            <h2 className="text-3xl md:text-4xl font-bold text-center mb-12 md:mb-16 bg-gradient-to-r from-blue-400 to-cyan-500 text-transparent bg-clip-text">
+              Roadmap
+            </h2>
+            <Roadmap />
+          </div>
+        </section>
+
+        <section id="faq" className="container mx-auto px-4 py-16 md:py-24">
+          <div className="bg-black/40 backdrop-blur-sm rounded-2xl p-8 border border-white/10">
+            <h2 className="text-3xl md:text-4xl font-bold text-center mb-8 md:mb-12 bg-gradient-to-r from-blue-400 to-cyan-500 text-transparent bg-clip-text">
+              FAQ
+            </h2>
+            <FAQ />
+          </div>
+        </section>
+      </div>
+      
+      <Footer />
     </div>
   );
 }
-

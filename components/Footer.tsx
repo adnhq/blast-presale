@@ -4,7 +4,7 @@ import Link from "next/link";
 
 export default function Footer() {
   return (
-    <footer className="py-20 px-8 bg-black border-t">
+    <footer className="py-20 px-8 relative z-10 border-t">
       <div className="max-w-7xl mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-8 gap-12">
           <div className="lg:col-span-3 flex flex-col space-y-4">

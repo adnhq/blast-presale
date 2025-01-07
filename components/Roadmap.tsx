@@ -1,8 +1,20 @@
 import React from 'react';
-import { CheckCircle2, Circle, ChevronRight, Rocket, Users, Building, Globe } from "lucide-react";
+import { CheckCircle2, Circle, ChevronRight, Rocket, Users, Building, Globe, LucideIcon } from "lucide-react";
 import { Card } from "@/components/ui/card";
 
-const phases = [
+interface Phase {
+  title: string;
+  description: string;
+  items: string[];
+  status: 'completed' | 'in-progress' | 'upcoming';
+  icon: LucideIcon;
+}
+
+interface TimelineNodeProps {
+  status: Phase['status'];
+}
+
+const phases: Phase[] = [
   {
     title: "Phase 1",
     description: "Launch & Initial Growth",
@@ -33,7 +45,7 @@ const phases = [
   }
 ];
 
-const TimelineNode = ({ status }) => {
+const TimelineNode: React.FC<TimelineNodeProps> = ({ status }) => {
   if (status === "completed") {
     return (
       <div className="w-8 h-8 rounded-full bg-gradient-to-r from-blue-400 to-cyan-500 flex items-center justify-center">
@@ -53,7 +65,7 @@ const TimelineNode = ({ status }) => {
   );
 };
 
-export default function Roadmap() {
+const Roadmap: React.FC = () => {
   return (
     <div className="max-w-5xl mx-auto px-4">
       {/* Desktop Timeline */}
@@ -138,4 +150,6 @@ export default function Roadmap() {
       </div>
     </div>
   );
-}
+};
+
+export default Roadmap;

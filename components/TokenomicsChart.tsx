@@ -1,5 +1,36 @@
 import React, { useState } from 'react';
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Sector } from 'recharts';
+import { PieSectorDataItem } from 'recharts/types/polar/Pie';
+
+interface TokenData {
+  name: string;
+  value: number;
+  description: string;
+}
+
+interface CustomTooltipProps {
+  active?: boolean;
+  payload?: Array<{
+    payload: TokenData;
+  }>;
+}
+
+type ActiveShape<T> = (props: any) => React.ReactElement;
+
+interface ActiveShapeProps {
+  cx: number;
+  cy: number;
+  midAngle: number;
+  innerRadius: number;
+  outerRadius: number;
+  startAngle: number;
+  endAngle: number;
+  fill: string;
+  payload: TokenData;
+  percent: number;
+  value: number;
+  index: number;
+}
 
 const COLORS = [
   '#3B82F6', // Blue
@@ -9,7 +40,7 @@ const COLORS = [
   '#EC4899'  // Pink
 ];
 
-const data = [
+const data: TokenData[] = [
   { name: "Presale", value: 25, description: "Public token sale allocation" },
   { name: "Marketing", value: 25, description: "Marketing and partnerships" },
   { name: "Treasury", value: 25, description: "Project development and operations" },
@@ -17,7 +48,7 @@ const data = [
   { name: "Staking", value: 15, description: "Staking rewards for holders" }
 ];
 
-const CustomTooltip = ({ active, payload }) => {
+const CustomTooltip: React.FC<CustomTooltipProps> = ({ active, payload }) => {
   if (active && payload && payload.length) {
     const data = payload[0].payload;
     return (
@@ -31,7 +62,7 @@ const CustomTooltip = ({ active, payload }) => {
   return null;
 };
 
-const renderActiveShape = (props) => {
+const renderActiveShape: ActiveShape<PieSectorDataItem> = (props) => {
   const { cx, cy, innerRadius, outerRadius, startAngle, endAngle, fill } = props;
   return (
     <g>
@@ -49,10 +80,10 @@ const renderActiveShape = (props) => {
   );
 };
 
-export default function TokenomicsChart() {
-  const [activeIndex, setActiveIndex] = useState(null);
+const TokenomicsChart: React.FC = () => {
+  const [activeIndex, setActiveIndex] = useState<number | null>(null);
 
-  const onPieEnter = (_, index) => {
+  const onPieEnter = (_: any, index: number) => {
     setActiveIndex(index);
   };
 
@@ -62,7 +93,6 @@ export default function TokenomicsChart() {
 
   return (
     <div className="w-full">
-      {/* Total Supply Section */}
       <div className="text-center mb-8">
         <h3 className="text-2xl md:text-4xl font-bold mb-2">
           Total Supply
@@ -75,9 +105,7 @@ export default function TokenomicsChart() {
         </p>
       </div>
 
-      {/* Chart and Legend Container */}
       <div className="flex flex-col lg:flex-row gap-8 items-center lg:items-start">
-        {/* Chart Section */}
         <div className="w-full lg:w-1/2">
           <div className="h-[300px] md:h-[400px]">
             <ResponsiveContainer width="100%" height="100%">
@@ -92,13 +120,13 @@ export default function TokenomicsChart() {
                   dataKey="value"
                   onMouseEnter={onPieEnter}
                   onMouseLeave={onPieLeave}
-                  activeIndex={activeIndex}
+                  activeIndex={activeIndex ?? undefined}
                   activeShape={renderActiveShape}
                 >
-                  {data.map((entry, index) => (
+                  {data.map((_, index) => (
                     <Cell 
                       key={`cell-${index}`} 
-                      fill={COLORS[index]}
+                      fill={COLORS[index % COLORS.length]}
                       className="transition-all duration-300 cursor-pointer"
                     />
                   ))}
@@ -109,7 +137,6 @@ export default function TokenomicsChart() {
           </div>
         </div>
 
-        {/* Legend Section */}
         <div className="w-full lg:w-1/2 space-y-3">
           {data.map((item, index) => (
             <div 
@@ -122,7 +149,7 @@ export default function TokenomicsChart() {
             >
               <div 
                 className="w-4 h-4 rounded-full shrink-0"
-                style={{ backgroundColor: COLORS[index] }}
+                style={{ backgroundColor: COLORS[index % COLORS.length] }}
               />
               <div className="flex-1 min-w-0">
                 <div className="flex justify-between items-center gap-4">
@@ -143,4 +170,6 @@ export default function TokenomicsChart() {
       </div>
     </div>
   );
-}
+};
+
+export default TokenomicsChart;

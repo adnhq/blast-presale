@@ -7,29 +7,38 @@ import Footer from "@/components/Footer";
 import FAQ from "@/components/FAQ";
 import Image from 'next/image';
 import { Droplets, Menu, X } from 'lucide-react';
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import blastoise from "../public/pixelcut-export.jpeg";
 import tokenomicsBlastoise from "../public/blastoise-1.png";
-import woodsBg from "../public/potential.jpeg";
 import WaterBackground from "@/components/WaterBackground";
 
 export default function Home() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    if (videoRef.current) {
+      videoRef.current.playbackRate = 0.75; // Slow down the video playback
+    }
+  }, []);
 
   return (
     <div className="min-h-screen text-white overflow-x-hidden relative">
-      {/* Nature Background */}
+      {/* Nature Background Video */}
       <WaterBackground></WaterBackground>
       <div className="fixed inset-0 w-full h-full z-0">
-        
-        <Image
-          src={woodsBg}
-          alt="Forest background"
-          fill
-          className="object-cover"
-          priority
-        />
-        <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/70 to-black/90" />
+        <video
+          ref={videoRef}
+          autoPlay
+          loop
+          muted
+          playsInline
+          className="object-cover w-full h-full"
+        >
+          <source src="/background.mp4" type="video/mp4" />
+          Your browser does not support the video tag.
+        </video>
+        <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/60 to-black/80" />
       </div>
 
       <nav className="border-b border-white/10 relative z-50 bg-black/50 backdrop-blur-sm">
@@ -164,3 +173,4 @@ export default function Home() {
     </div>
   );
 }
+

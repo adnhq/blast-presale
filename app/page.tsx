@@ -19,6 +19,17 @@ export default function Home() {
   useEffect(() => {
     if (videoRef.current) {
       videoRef.current.playbackRate = 0.75; // Slow down the video playback
+    
+      const ensurePlayback = () => {
+        if (videoRef.current && videoRef.current.paused) {
+          videoRef.current.play().catch(error => console.error("Playback failed:", error));
+        }
+      };
+
+      // Check every 5 seconds if the video is still playing
+      const intervalId = setInterval(ensurePlayback, 5000);
+
+      return () => clearInterval(intervalId);
     }
   }, []);
 
@@ -34,6 +45,10 @@ export default function Home() {
           muted
           playsInline
           className="object-cover w-full h-full"
+          onEnded={(e) => {
+            e.currentTarget.currentTime = 0;
+            e.currentTarget.play();
+          }}
         >
           <source src="/background.mp4" type="video/mp4" />
           Your browser does not support the video tag.

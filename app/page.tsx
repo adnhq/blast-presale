@@ -120,23 +120,25 @@ export default function Home() {
       </nav>
 
       {/* Hero Section with BuySection */}
-      <div className="relative h-screen md:h-[90vh]" style={{ zIndex: 10 }}>
+      <div className="relative h-[100vh] md:h-[90vh]" style={{ zIndex: 10 }}>
         <div className="absolute inset-0">
-          <Image
-            src={blastoise}
-            alt="Blastoise background"
-            fill
-            className="object-cover"
-            priority
-          />
-          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/90 pointer-events-none" />
+          <div className="relative h-[60vh] md:h-full">
+            <Image
+              src={blastoise}
+              alt="Blastoise background"
+              fill
+              className="object-cover"
+              priority
+            />
+            <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/90 pointer-events-none" />
+          </div>
         </div>
-        <div className="absolute inset-0 flex flex-col md:flex-row">
+        <div className="absolute inset-0 flex flex-col md:flex-row items-end md:items-stretch pt-[35vh] md:pt-0">
           {/* Left side - empty space for Blastoise */}
           <div className="hidden md:block md:flex-1" />
           
           {/* Right side - Buy Section */}
-          <div className="w-full md:w-1/4 min-w-[320px] md:min-w-[380px] z-20">
+          <div className="w-full px-4 md:px-0 md:w-1/4 min-w-[320px] md:min-w-[380px] z-20">
             <BuySection />
           </div>
         </div>

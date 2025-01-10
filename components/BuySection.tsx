@@ -38,7 +38,7 @@ export default function BuySection() {
         <div className="relative flex flex-col p-4 md:p-6 h-full">
           <div className="text-center mb-4 md:mb-6 flex-shrink-0">
             <div className="relative inline-block">
-              <div className="flex items-center justify-center gap-2 mb-2 relative">
+              <div className="flex items-center justify-center gap-2 mb-4 relative">
                 <Gem className="w-5 h-5 md:w-6 md:h-6 text-blue-400 animate-twinkle" />
                 <h2 className="text-xl md:text-2xl font-bold bg-gradient-to-r from-blue-400 to-cyan-500 text-transparent bg-clip-text animate-gradient">
                   BLAST Presale
@@ -47,7 +47,7 @@ export default function BuySection() {
               </div>
             </div>
             
-            <div className="h-24 md:h-28">
+            <div className="h-24 sm:h-28 md:h-32 w-full overflow-hidden">
               <CountdownTimer />
             </div>
             

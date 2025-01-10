@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { Clock } from "lucide-react";
 
 export default function CountdownTimer() {
   const [timeLeft, setTimeLeft] = useState({
@@ -33,15 +34,18 @@ export default function CountdownTimer() {
   };
 
   return (
-    <div className="flex flex-wrap gap-1 md:gap-2 justify-center items-center h-full">
+    <div className="flex items-center justify-center gap-2 sm:gap-3 md:gap-4 w-full max-w-full mx-auto px-2">
       {Object.entries(timeLeft).map(([label, value]) => {
         const max = label === 'days' ? 7 : label === 'hours' ? 24 : 60;
         return (
-          <div key={label} className="flex flex-col items-center">
-            <div className="relative w-14 h-14 md:w-16 md:h-16">
+          <div 
+            key={label} 
+            className="flex flex-col items-center"
+          >
+            <div className="relative w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20">
               <svg className="w-full h-full -rotate-90" viewBox="0 0 100 100">
                 <circle
-                  className="text-gray-200"
+                  className="text-white/10"
                   strokeWidth="4"
                   stroke="currentColor"
                   fill="transparent"
@@ -50,7 +54,7 @@ export default function CountdownTimer() {
                   cy="50"
                 />
                 <circle
-                  className="text-primary"
+                  className="text-blue-400 transition-all duration-1000 ease-in-out"
                   strokeWidth="4"
                   strokeLinecap="round"
                   stroke="currentColor"
@@ -62,13 +66,13 @@ export default function CountdownTimer() {
                   strokeDashoffset="0"
                 />
               </svg>
-              <div className="absolute inset-0 flex items-center justify-center">
-                <span className="text-lg md:text-xl font-bold">
+              <div className="absolute inset-0 flex flex-col items-center justify-center">
+                <span className="text-lg sm:text-xl md:text-2xl font-bold text-white">
                   {value.toString().padStart(2, '0')}
                 </span>
               </div>
             </div>
-            <span className="text-xs mt-1 font-medium uppercase tracking-wider">
+            <span className="text-[10px] sm:text-xs text-white/60 font-medium uppercase tracking-wider mt-1">
               {label}
             </span>
           </div>

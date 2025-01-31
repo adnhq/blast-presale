@@ -1,5 +1,4 @@
-import React from "react";
-import { Twitter, MessageCircle, Send } from "lucide-react";
+import { MessageCircle, Send, Twitter } from "lucide-react";
 import Link from "next/link";
 
 export default function Footer() {
@@ -9,9 +8,7 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-8 gap-12">
           <div className="lg:col-span-3 flex flex-col space-y-4">
             <Link href="/" className="flex items-center space-x-2">
-              <span className="text-blue-400 text-4xl font-bold">
-                BLAST
-              </span>
+              <span className="text-blue-400 text-4xl font-bold">BLAST</span>
             </Link>
             <p className="text-sm text-muted-foreground leading-relaxed">
               Don't miss out on the biggest opportunity of 2025!
@@ -19,9 +16,7 @@ export default function Footer() {
           </div>
 
           <div className="lg:col-span-2 flex flex-col space-y-4">
-            <h2 className="font-semibold text-xl">
-              Quick Links
-            </h2>
+            <h2 className="font-semibold text-xl">Quick Links</h2>
 
             <a
               href="#buy"
@@ -53,9 +48,7 @@ export default function Footer() {
           </div>
 
           <div className="lg:col-span-3 flex flex-col space-y-5">
-            <h2 className="font-semibold text-xl">
-              Join Our Community
-            </h2>
+            <h2 className="font-semibold text-xl">Join Our Community</h2>
             <div className="flex flex-wrap gap-2">
               {[
                 { icon: Twitter, label: "Twitter", href: "#" },

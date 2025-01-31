@@ -1,22 +1,126 @@
-"use client"
-
-import { useState } from "react"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import CountdownTimer from "./CountdownTimer"
-import { Wallet, Gem, ArrowRight } from "lucide-react"
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { ArrowRight, Gem, Loader2, Wallet } from "lucide-react";
+import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
+import CountdownTimer from "./CountdownTimer";
+import useContractFuncs from "./useContractFuncs";
 
 export default function BuySection() {
-  const [inputAmount, setInputAmount] = useState("")
-  const [isHovered, setIsHovered] = useState(false)
+  const [inputAmount, setInputAmount] = useState("");
+  const [tokenAmount, setTokenAmount] = useState<string>("0");
+  const [isHovered, setIsHovered] = useState(false);
+  const {
+    isConnected,
+    buyToken,
+    getCalculatedToken,
+    getBlastTokenPrice,
+    getPurchasedAmount,
+    getTimeRemaining,
+  } = useContractFuncs();
+  const [isLoading, setIsLoading] = useState(false);
+  const [isClaimLoading, setIsClaimLoading] = useState(false);
+  const [isBlastPriceLoading, setIsBlastPriceLoading] = useState(false);
+  const [blastPrice, setBlastPrice] = useState<string | null>(null);
+  const [blastBalance, setBlastBalance] = useState<string | null>(null);
+  const [claimable, setClaimable] = useState(false);
 
-  const BLAST_PRICE = 0.004
-  const SOL_PRICE = 100
+  useEffect(() => {
+    async function fetchPrice() {
+      setIsBlastPriceLoading(true);
+      const price = await getBlastTokenPrice();
 
-  const calculateOutput = () => {
-    if (!inputAmount) return ""
-    return ((Number.parseFloat(inputAmount) * SOL_PRICE) / BLAST_PRICE).toFixed(2)
-  }
+      if (isConnected) {
+        const remainingTime = await getTimeRemaining();
+        if (
+          remainingTime.days === 0 &&
+          remainingTime.hours === 0 &&
+          remainingTime.minutes === 0 &&
+          remainingTime.seconds === 0
+        ) {
+          setClaimable(true);
+        }
+      }
+
+      setBlastPrice(price);
+      setIsBlastPriceLoading(false);
+    }
+
+    fetchPrice();
+  }, []);
+
+  useEffect(() => {
+    async function fetchBalance() {
+      if (isConnected) {
+        const balance = await getPurchasedAmount();
+        setBlastBalance(balance);
+      }
+    }
+
+    fetchBalance();
+  }, [isConnected]);
+
+  // Debounce logic
+  useEffect(() => {
+    const delayDebounceFn = setTimeout(async () => {
+      if (!inputAmount || Number(inputAmount) < 0) {
+        setTokenAmount("0");
+        return;
+      }
+
+      const expTokenAmount = await getCalculatedToken(inputAmount);
+      const formattedTokenAmount = expTokenAmount.toString();
+      setTokenAmount(formattedTokenAmount);
+    }, 300); // 300ms delay
+
+    return () => clearTimeout(delayDebounceFn);
+  }, [inputAmount, isConnected, getCalculatedToken]);
+
+  const handleBuy = async () => {
+    if (!isConnected) {
+      toast.error("Please connect your wallet to buy $BLAST tokens.");
+      return;
+    }
+
+    try {
+      setIsLoading(true);
+      await buyToken(inputAmount);
+      const balance = await getPurchasedAmount();
+      setBlastBalance(balance);
+      toast.success(
+        `Transaction successful! You have bought ${tokenAmount} $BLAST tokens.`
+      );
+    } catch (error) {
+      console.error(error);
+      toast.error("Transaction failed. Please try again!");
+    } finally {
+      setInputAmount("");
+      setTokenAmount("0");
+      setIsLoading(false);
+    }
+  };
+
+  const claimTokens = async () => {
+    if (!isConnected) {
+      toast.error("Please connect your wallet to claim $BLAST tokens.");
+      return;
+    }
+
+    try {
+      setIsClaimLoading(true);
+      const balance = await getPurchasedAmount();
+      await claimTokens();
+      setBlastBalance(balance);
+      toast.success(
+        `Transaction successful! You have claimed ${balance} $BLAST tokens.`
+      );
+    } catch (error) {
+      console.error(error);
+      toast.error((error as Error).message);
+    } finally {
+      setIsClaimLoading(false);
+    }
+  };
 
   return (
     <div className="h-full relative group">
@@ -48,26 +152,59 @@ export default function BuySection() {
               <CountdownTimer />
             </div>
 
-            <div className="mt-2 md:mt-3 text-base md:text-lg font-semibold flex items-center justify-center gap-2">
-              <span className="text-white/80">1 $BLAST =</span>
-              <span className="text-white font-bold">${BLAST_PRICE}</span>
+            <Button
+              className="w-full h-10 md:h-12 text-sm md:text-base font-bold relative overflow-hidden group mb-8 mt-6"
+              disabled={
+                !isConnected || isLoading || isClaimLoading || !claimable
+              }
+              onClick={claimTokens}
+            >
+              <div className="absolute inset-0 bg-gradient-to-r from-blue-400 to-cyan-500 disabled:from-blue-300 disabled:to-cyan-400 disabled:cursor-not-allowed transition-transform duration-300 group-hover:scale-105" />
+              <div className="relative flex items-center justify-center gap-2">
+                <Wallet
+                  className={`w-4 h-4 md:w-5 md:h-5 transition-transform duration-300 
+                  `}
+                />
+                <span className="tracking-wide">
+                  {isClaimLoading ? "Claiming..." : "Claim"}
+                </span>
+              </div>
+            </Button>
+
+            <div className="mt-2 md:mt-3 text-sm md:text-base font-semibold flex items-center justify-center gap-2">
+              <span className="text-white/80">1 Blast Token costs </span>
+
+              {isBlastPriceLoading ? (
+                <span className="text-white font-bold">
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                </span>
+              ) : (
+                blastPrice
+              )}
+              {" BNB"}
             </div>
-            <div className="mt-1 text-sm text-white/60">1 SOL = ${SOL_PRICE}</div>
+            {/* <div className="mt-1 text-sm text-white/60">
+              1 BNB = ${BNB_PRICE}
+            </div> */}
           </div>
 
           <div className="space-y-3 md:space-y-4 flex-1 min-h-0">
             <div className="flex items-center justify-center space-x-2 mb-3 bg-white/5 rounded-full py-2 px-4">
               <img
-                src="https://cryptologos.cc/logos/solana-sol-logo.png"
-                alt="Solana"
+                src="https://w7.pngwing.com/pngs/1007/775/png-transparent-bnb-cryptocurrencies-icon.png"
+                alt="BNB"
                 className="w-5 h-5 md:w-6 md:h-6"
               />
-              <span className="text-sm md:text-base font-semibold text-white">Solana</span>
+              <div className="text-sm md:text-sm font-normal text-white">
+                Your Blast Token Balance:{" "}
+                <span className="font-medium">
+                  {blastBalance !== null ? blastBalance : 0}
+                </span>
+              </div>
             </div>
             <div className="space-y-1">
               <div className="flex justify-between text-xs md:text-sm text-white/60">
-                <label>Amount in SOL:</label>
-                <span>Balance: 0.00</span>
+                <label>Amount in BNB:</label>
               </div>
               <Input
                 type="number"
@@ -90,7 +227,7 @@ export default function BuySection() {
               </div>
               <Input
                 readOnly
-                value={calculateOutput()}
+                value={tokenAmount}
                 className="h-10 md:h-12 text-sm md:text-base bg-white/5 border-white/10"
                 placeholder="0.0"
               />
@@ -100,19 +237,28 @@ export default function BuySection() {
               className="w-full h-10 md:h-12 text-sm md:text-base font-bold relative overflow-hidden group"
               onMouseEnter={() => setIsHovered(true)}
               onMouseLeave={() => setIsHovered(false)}
+              onClick={handleBuy}
+              disabled={!isConnected || isLoading}
             >
-              <div className="absolute inset-0 bg-gradient-to-r from-blue-400 to-cyan-500 transition-transform duration-300 group-hover:scale-105" />
+              <div className="absolute inset-0 bg-gradient-to-r from-blue-400 to-cyan-500 disabled:from-blue-300 disabled:to-cyan-400 disabled:cursor-not-allowed transition-transform duration-300 group-hover:scale-105" />
               <div className="relative flex items-center justify-center gap-2">
                 <Wallet
-                  className={`w-4 h-4 md:w-5 md:h-5 transition-transform duration-300 ${isHovered ? "scale-110" : "scale-100"}`}
+                  className={`w-4 h-4 md:w-5 md:h-5 transition-transform duration-300 ${
+                    isHovered ? "scale-110" : "scale-100"
+                  }`}
                 />
-                <span className="tracking-wide">Buy $BLAST</span>
+                <span className="tracking-wide">
+                  {isConnected
+                    ? isLoading
+                      ? "Buying blast..."
+                      : "Buy $BLAST"
+                    : "Connect wallet to buy blast"}
+                </span>
               </div>
             </Button>
           </div>
         </div>
       </div>
     </div>
-  )
+  );
 }
-

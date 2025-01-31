@@ -1,10 +1,11 @@
-import React from 'react';
-
 const WaterBackground = () => {
   return (
     <>
       {/* Bubble animations */}
-      <div className="fixed inset-0 overflow-hidden pointer-events-none" style={{ zIndex: 15 }}>
+      <div
+        className="fixed inset-0 overflow-hidden pointer-events-none"
+        style={{ zIndex: 15 }}
+      >
         {/* Large bubbles */}
         {[...Array(20)].map((_, i) => (
           <div
@@ -15,7 +16,7 @@ const WaterBackground = () => {
               width: `${Math.random() * 40 + 20}px`,
               height: `${Math.random() * 40 + 20}px`,
               animationDelay: `${Math.random() * 8}s`,
-              animationDuration: `${Math.random() * 4 + 6}s`
+              animationDuration: `${Math.random() * 4 + 6}s`,
             }}
           />
         ))}
@@ -29,7 +30,7 @@ const WaterBackground = () => {
               width: `${Math.random() * 20 + 10}px`,
               height: `${Math.random() * 20 + 10}px`,
               animationDelay: `${Math.random() * 10}s`,
-              animationDuration: `${Math.random() * 3 + 4}s`
+              animationDuration: `${Math.random() * 3 + 4}s`,
             }}
           />
         ))}
@@ -43,7 +44,7 @@ const WaterBackground = () => {
               width: `${Math.random() * 10 + 5}px`,
               height: `${Math.random() * 10 + 5}px`,
               animationDelay: `${Math.random() * 12}s`,
-              animationDuration: `${Math.random() * 2 + 3}s`
+              animationDuration: `${Math.random() * 2 + 3}s`,
             }}
           />
         ))}

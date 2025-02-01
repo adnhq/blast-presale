@@ -101,6 +101,11 @@ export default function useContractFuncs() {
     const price = await readOnlyContract.getCurrentPrice();
     return formatUnits(price, 18);
   };
+  
+  const getBlastTokenPriceInUSD = async () => {
+    const price = await readOnlyContract.getCurrentPriceInUSD();
+    return formatUnits(price, 8);
+  };
 
   const getPurchasedAmount = async () => {
     const amount = await readOnlyContract.getPurchasedAmount(address);
@@ -117,6 +122,7 @@ export default function useContractFuncs() {
     getTimeRemaining,
     getBlastTokenPrice,
     getPurchasedAmount,
+    getBlastTokenPriceInUSD,
 
     // Connection status
     isConnected,

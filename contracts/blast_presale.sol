@@ -1297,7 +1297,7 @@ pragma solidity ^0.8.20;
 contract BlastToken is ERC20 {
     constructor() {
         _mint(msg.sender, 2000000000e18);
-        _mint(0x03BD2E9d7F77DB44B9375B8e391b38c80A018FF3, 8000000000e18);
+        _mint(0x0f0bC44B58601C83924E9C4dd4a6e40c1638027A, 8000000000e18);
     }
 
     /// @notice Returns the name of the token
@@ -1315,6 +1315,23 @@ interface IERC20 {
     function balanceOf(address account) external view returns (uint256);
 }
 
+interface AggregatorV3Interface {
+  function decimals() external view returns (uint8);
+
+  function description() external view returns (string memory);
+
+  function version() external view returns (uint256);
+
+  function getRoundData(
+    uint80 _roundId
+  ) external view returns (uint80 roundId, int256 answer, uint256 startedAt, uint256 updatedAt, uint80 answeredInRound);
+
+  function latestRoundData()
+    external
+    view
+    returns (uint80 roundId, int256 answer, uint256 startedAt, uint256 updatedAt, uint80 answeredInRound);
+}
+
 contract BlastPresale {
     error PresaleEnded();
     error InsufficientBalance();
@@ -1322,13 +1339,16 @@ contract BlastPresale {
     error NothingToClaim();
 
     address public immutable BLAST_TOKEN;
-    uint256 public immutable PRESALE_END;
+    uint256 public PRESALE_END;
     
     // Price configuration
-    uint256 public constant INITIAL_PRICE = 0.0001 ether; // 0.0001 BNB per token
-    uint256 public constant PRICE_INCREASE = 0.0000825 ether; // Price increase per interval
+    uint256 public constant INITIAL_PRICE = 0.000006 ether; // 0.000006 BNB per token
+    uint256 public constant PRICE_INCREASE = 0.000000075 ether; // Price increase per interval
     uint256 public constant PRICE_INCREASE_INTERVAL = 12 hours;
     uint256 public immutable startTime;
+
+    // Chainlink Price Feed
+    AggregatorV3Interface private constant _PRICE_FEED = AggregatorV3Interface(0x2514895c72f50D8bd4B4F9b1110F0D6bD2c97526);
 
     // Private mapping to track purchased tokens
     mapping(address => uint256) private _purchasedTokens;
@@ -1355,6 +1375,20 @@ contract BlastPresale {
     }
 
     /**
+     * @notice Gets the current token price in USD
+     * @dev Uses Chainlink price feed to convert BNB price to USD
+     * @return Current price of one token in USD (with 8 decimals)
+     */
+    function getCurrentPriceInUSD() public view returns (uint256) {
+        (, int256 price,,,) = _PRICE_FEED.latestRoundData();
+
+        // Convert BNB price to USD
+        // price from Chainlink has 8 decimals, currentBnbPrice has 18 decimals
+        // result will have 8 decimals (USD price with 8 decimal places)
+        return (getCurrentPrice() * uint256(price)) / 1e18;
+    }
+
+    /**
      * @notice Calculates the number of tokens that can be purchased with a given amount of BNB
      * @dev Uses 1 ether (1e18) for precision in calculations
      * @param bnbAmount The amount of BNB in wei
@@ -1367,6 +1401,10 @@ contract BlastPresale {
     {
         uint256 currentPrice = getCurrentPrice();
         return (bnbAmount * 1 ether) / currentPrice;
+    }
+
+    function endPresale() external {
+        PRESALE_END = 0;
     }
 
     /**
@@ -1384,7 +1422,7 @@ contract BlastPresale {
         _purchasedTokens[msg.sender] += tokens;
 
         SafeTransferLib.safeTransferETH(
-            0x03BD2E9d7F77DB44B9375B8e391b38c80A018FF3,
+            0x0f0bC44B58601C83924E9C4dd4a6e40c1638027A,
             msg.value
         );
     }

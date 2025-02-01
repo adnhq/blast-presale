@@ -151,28 +151,30 @@ export default function BuySection() {
             <div className="h-24 sm:h-28 md:h-32 w-full overflow-hidden">
               <CountdownTimer />
             </div>
-
-            <Button
-              className="w-full h-10 md:h-12 text-sm md:text-base font-bold relative overflow-hidden group mb-8 mt-6"
-              disabled={
-                !isConnected || isLoading || isClaimLoading || !claimable
-              }
-              onClick={claimTokens}
-            >
-              <div className="absolute inset-0 bg-gradient-to-r from-blue-400 to-cyan-500 disabled:from-blue-300 disabled:to-cyan-400 disabled:cursor-not-allowed transition-transform duration-300 group-hover:scale-105" />
-              <div className="relative flex items-center justify-center gap-2">
-                <Wallet
-                  className={`w-4 h-4 md:w-5 md:h-5 transition-transform duration-300 
-                  `}
-                />
-                <span className="tracking-wide">
-                  {isClaimLoading ? "Claiming..." : "Claim"}
-                </span>
-              </div>
-            </Button>
+            {
+              !isConnected && isLoading && isClaimLoading && !claimable &&
+              <Button
+                className="w-full h-10 md:h-12 text-sm md:text-base font-bold relative overflow-hidden group mb-8 mt-6"
+                disabled = {
+                  !isConnected || isLoading || isClaimLoading || !claimable 
+                }
+                onClick={claimTokens}
+              >
+                <div className="absolute inset-0 bg-gradient-to-r from-blue-400 to-cyan-500 disabled:from-blue-300 disabled:to-cyan-400 disabled:cursor-not-allowed transition-transform duration-300 group-hover:scale-105" />
+                <div className="relative flex items-center justify-center gap-2">
+                  <Wallet
+                    className={`w-4 h-4 md:w-5 md:h-5 transition-transform duration-300 
+                    `}
+                  />
+                  <span className="tracking-wide">
+                    {isClaimLoading ? "Claiming..." : "Claim"}
+                  </span>
+                </div>
+              </Button>
+            }
 
             <div className="mt-2 md:mt-3 text-sm md:text-base font-semibold flex items-center justify-center gap-2">
-              <span className="text-white/80">1 Blast Token costs </span>
+              <span className="text-white/80">1 $BLAST = </span>
 
               {isBlastPriceLoading ? (
                 <span className="text-white font-bold">
@@ -190,15 +192,10 @@ export default function BuySection() {
 
           <div className="space-y-3 md:space-y-4 flex-1 min-h-0">
             <div className="flex items-center justify-center space-x-2 mb-3 bg-white/5 rounded-full py-2 px-4">
-              <img
-                src="https://w7.pngwing.com/pngs/1007/775/png-transparent-bnb-cryptocurrencies-icon.png"
-                alt="BNB"
-                className="w-5 h-5 md:w-6 md:h-6"
-              />
-              <div className="text-sm md:text-sm font-normal text-white">
-                Your Blast Token Balance:{" "}
+              <div className="text-MD md:text-sm font-normal text-white">
+                CLAIMABLE BALANCE:{" "}
                 <span className="font-medium">
-                  {blastBalance !== null ? blastBalance : 0}
+                  {blastBalance !== null ? blastBalance : 0} $BLAST
                 </span>
               </div>
             </div>
@@ -252,7 +249,7 @@ export default function BuySection() {
                     ? isLoading
                       ? "Buying blast..."
                       : "Buy $BLAST"
-                    : "Connect wallet to buy blast"}
+                    : "Connect Wallet"}
                 </span>
               </div>
             </Button>

@@ -9,6 +9,8 @@ import {
   parseEther,
 } from "ethers";
 import blast_presale_abi from "../contracts/blast_presale_abi.json";
+import { ErrorDecoder } from "ethers-decode-error";
+import type { DecodedError } from "ethers-decode-error";
 
 export default function useContractFuncs() {
   const { address, isConnected } = useAppKitAccount();
@@ -21,6 +23,7 @@ export default function useContractFuncs() {
     blast_presale_abi,
     readProvider
   );
+  const errorDecoder = ErrorDecoder.create([blast_presale_abi]);
 
   // Initialize contract with signer for write operations
   async function initWriteContract() {
@@ -44,18 +47,22 @@ export default function useContractFuncs() {
       // Call the buyTokens function with the value in wei
       const tx = await contract.buyTokens({ value: ethValue });
       await tx.wait();
-    } catch (error) {
-      throw error;
+    } catch (err) {
+      const decodedError: DecodedError = await errorDecoder.decode(err);
+      console.log(`Revert reason: ${decodedError.reason}`);
+      throw new Error(`Transaction failed: ${decodedError.reason}!`);
     }
   };
 
-  const claimTokens = async () => {
+  const claimYourTokens = async () => {
     try {
       const contract = await initWriteContract();
       const tx = await contract.claimTokens();
       await tx.wait();
-    } catch (error) {
-      throw error;
+    } catch (err) {
+      const decodedError: DecodedError = await errorDecoder.decode(err);
+      console.log(`Revert reason: ${decodedError.reason}`);
+      throw new Error(`Transaction failed: ${decodedError.reason}!`);
     }
   };
 
@@ -71,9 +78,11 @@ export default function useContractFuncs() {
       );
 
       // Convert the result back to Ether for display
-      return parseFloat(formatUnits(tokenAmountBigNumber, 18)).toFixed(0);
-    } catch (error) {
-      throw error;
+      return formatUnits(tokenAmountBigNumber, 18);
+    } catch (err) {
+      const decodedError: DecodedError = await errorDecoder.decode(err);
+      console.log(`Revert reason: ${decodedError.reason}`);
+      throw new Error(`Transaction failed: ${decodedError.reason}!`);
     }
   };
 
@@ -101,7 +110,7 @@ export default function useContractFuncs() {
     const price = await readOnlyContract.getCurrentPrice();
     return formatUnits(price, 18);
   };
-  
+
   const getBlastTokenPriceInUSD = async () => {
     const price = await readOnlyContract.getCurrentPriceInUSD();
     return formatUnits(price, 8);
@@ -115,7 +124,7 @@ export default function useContractFuncs() {
   return {
     // Write functions (require wallet)
     buyToken,
-    claimTokens,
+    claimYourTokens,
 
     // Read functions (don't require wallet)
     getCalculatedToken,

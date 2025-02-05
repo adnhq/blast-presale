@@ -17,7 +17,7 @@ export default function FAQ() {
     {
       question: "How can I participate in the presale?",
       answer:
-        "You can participate in the presale by connecting your wallet and purchasing $BLAST tokens using either SOL or BNB. The minimum purchase amount is 0.1 SOL/BNB.",
+        "You can participate in the presale by connecting your wallet and purchasing $BLAST tokens using BNB.",
     },
     {
       question: "When will trading go live?",
@@ -27,7 +27,7 @@ export default function FAQ() {
     {
       question: "Is there a vesting period?",
       answer:
-        "Presale tokens are released immediately after the presale ends. There is no vesting period for presale participants.",
+        "Purchased tokens can be claimed after presale ends",
     },
     {
       question: "What are the tokenomics?",

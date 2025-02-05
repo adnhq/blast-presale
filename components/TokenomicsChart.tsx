@@ -105,7 +105,7 @@ const TokenomicsChart: React.FC = () => {
 
   return (
     <div className="w-full">
-      <div className="text-center mb-8">
+      <div className="text-center mb-8 md:hidden">
         <h3 className="text-2xl md:text-4xl font-bold mb-2">Total Supply</h3>
         <p className="text-4xl md:text-6xl font-bold text-blue-400">
           10,000,000,000

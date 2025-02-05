@@ -1,8 +1,7 @@
-import { AppKitProvider } from "@/components/AppKitProvider";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ArrowRight, Gem, Loader2, Wallet } from "lucide-react";
-import Link from 'next/link';
+import Link from "next/link";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import CountdownTimer from "./CountdownTimer";
@@ -37,10 +36,10 @@ export default function BuySection() {
   useEffect(() => {
     async function fetchPrice() {
       const price = await getBlastTokenPrice();
-      const priceInUsd = await getBlastTokenPriceInUSD(); 
+      const priceInUsd = await getBlastTokenPriceInUSD();
       const remTokens = await getRemainingTokens();
       const bAddress = await getBlastAddress();
-      
+
       setBlastAddress(bAddress);
       setRemainingTokens(remTokens);
       setBlastPrice(price);
@@ -98,14 +97,14 @@ export default function BuySection() {
       setIsLoading(true);
       await buyToken(inputAmount);
       const price = await getBlastTokenPrice();
-      const priceInUsd = await getBlastTokenPriceInUSD(); 
+      const priceInUsd = await getBlastTokenPriceInUSD();
       const remTokens = await getRemainingTokens();
 
       setRemainingTokens(remTokens);
       setBlastPrice(price);
       setBlastPriceInUsd(priceInUsd);
       setIsBlastPriceLoading(false);
-      
+
       const balance = await getPurchasedAmount();
       setBlastBalance(balance);
       toast.success(
@@ -144,8 +143,7 @@ export default function BuySection() {
   };
 
   return (
-    <AppKitProvider>
-      <div className="flex flex-col h-full relative group">
+    <div className="flex flex-col h-full relative group">
       <div className="absolute -inset-[20px] bg-gradient-to-r from-blue-500 to-cyan-500 rounded-sm opacity-75 group-hover:opacity-100 blur transition duration-1000 animate-pulse" />
       <div className="absolute -inset-[20px] bg-gradient-to-r from-cyan-400 to-blue-400 rounded-sm opacity-50 group-hover:opacity-75 blur-md transition duration-1000 animate-pulse-slow" />
       <div className="relative h-full bg-gradient-to-b from-black/95 to-black/90 backdrop-blur-xl flex flex-col">
@@ -169,43 +167,49 @@ export default function BuySection() {
             )}
           </div>
 
-          {!claimable ? <>
-            <div className="mt-2 md:mt-3 text-lg md:text-lg font-semibold flex items-center justify-center gap-2">
-              <span className="text-white/80">Remaining Tokens: </span>
-              {isBlastPriceLoading ? (
-                <span className="text-white font-bold">
-                  <Loader2 className="w-4 h-4 animate-spin" />
-                </span>
-              ) : (
-                remainingTokens
-              )}
-              {" BLAST"}
-            </div>
+          {!claimable ? (
+            <>
+              <div className="mt-2 md:mt-3 text-lg md:text-lg font-semibold flex flex-col 2xl:flex-row items-center justify-center mb-4 2xl:gap-1">
+                <span className="text-white/80">Remaining Tokens: </span>
+                {isBlastPriceLoading ? (
+                  <span className="text-white font-bold">
+                    <Loader2 className="w-4 h-4 animate-spin" />
+                  </span>
+                ) : (
+                  remainingTokens
+                )}
+                {" BLAST"}
+              </div>
 
-            <div className="mt-2 md:mt-3 text-sm md:text-base font-semibold flex items-center justify-center gap-2">
-              <span className="text-white/80">1 $BLAST = </span>
-              {isBlastPriceLoading ? (
-                <span className="text-white font-bold">
-                  <Loader2 className="w-4 h-4 animate-spin" />
-                </span>
-              ) : (
-                blastPrice
-              )}
-              {" BNB"}
-            </div>
+              <div className="mt-2 md:mt-3 text-sm md:text-base font-semibold flex items-center justify-center gap-2">
+                <span className="text-white/80">1 $BLAST = </span>
+                {isBlastPriceLoading ? (
+                  <span className="text-white font-bold">
+                    <Loader2 className="w-4 h-4 animate-spin" />
+                  </span>
+                ) : (
+                  blastPrice
+                )}
+                {" BNB"}
+              </div>
 
-            <div className="mt-1 text-sm text-white/60 flex items-center justify-center gap-2">
-              1 $BLAST = $
-              {isBlastPriceLoading ? (
-                <span className="text-white">
-                  <Loader2 className="w-4 h-4 animate-spin" />
-                </span>
-              ) : (
-                blastPriceInUsd
-              )}
-            </div>
-          </> : <h2 className="text-center text-xl font-bold mb-8">PRESALE HAS ENDED</h2>}
-          
+              <div className="mt-1 text-sm text-white/60 flex items-center justify-center gap-2">
+                1 $BLAST = $
+                {isBlastPriceLoading ? (
+                  <span className="text-white">
+                    <Loader2 className="w-4 h-4 animate-spin" />
+                  </span>
+                ) : (
+                  blastPriceInUsd
+                )}
+              </div>
+            </>
+          ) : (
+            <h2 className="text-center text-xl font-bold mb-8">
+              PRESALE HAS ENDED
+            </h2>
+          )}
+
           <div className="space-y-3 md:space-y-4 flex-1 min-h-0">
             <div className="flex items-center justify-center space-x-2 mb-3 bg-white/5 rounded-lg py-2 px-4">
               <div className="text-MD md:text-sm font-normal text-white">
@@ -287,25 +291,30 @@ export default function BuySection() {
                       </div>
                     </Button>
                   ) : (
-                    <appkit-button />
+                    <div className="flex justify-center">
+                      <appkit-button />
+                    </div>
                   )}
                 </div>
               </>
             )}
           </div>
         </div>
-        <Link target="_blank" href={`https://bscscan.com/address/${blastAddress}`} className="mt-auto mb-4 flex flex-col md:flex-row items-center justify-center gap-2 hover:text-sky-500 hover:underline">
-            <p>$BLAST Token:</p>
-            {isBlastPriceLoading ? (
-                <span className="text-white">
-                  <Loader2 className="w-4 h-4 animate-spin" />
-                </span>
-              ) : (
-                blastAddress
-              )}
+        <Link
+          target="_blank"
+          href={`https://bscscan.com/address/${blastAddress}`}
+          className="mt-auto mb-4 flex flex-col items-center justify-center gap-2 hover:text-sky-500 hover:underline text-sm"
+        >
+          <p>$BLAST Token:</p>
+          {isBlastPriceLoading ? (
+            <span className="text-white">
+              <Loader2 className="w-4 h-4 animate-spin" />
+            </span>
+          ) : (
+            blastAddress
+          )}
         </Link>
       </div>
     </div>
-    </AppKitProvider>
   );
 }

@@ -186,6 +186,19 @@ export default function Home() {
               <h2 className="text-3xl md:text-4xl font-bold text-center mb-8 md:mb-12 bg-gradient-to-r from-blue-400 to-cyan-500 text-transparent bg-clip-text">
                 Tokenomics
               </h2>
+
+              <div className="text-center mb-8 hidden md:block">
+                <h3 className="text-2xl md:text-4xl font-bold mb-2">
+                  Total Supply
+                </h3>
+                <p className="text-4xl md:text-6xl font-bold text-blue-400">
+                  10,000,000,000
+                </p>
+                <p className="text-lg md:text-xl text-gray-400 mt-2">
+                  $BLAST Tokens
+                </p>
+              </div>
+
               <div className="flex flex-col md:flex-row gap-8 items-center">
                 <div className="w-full md:w-1/2 relative h-[400px] md:h-[600px]">
                   <Image
@@ -195,6 +208,7 @@ export default function Home() {
                     className="object-contain"
                   />
                 </div>
+
                 <div className="w-full md:w-1/2">
                   <TokenomicsChart />
                 </div>

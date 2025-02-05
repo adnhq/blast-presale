@@ -121,18 +121,29 @@ export default function useContractFuncs() {
     return formatUnits(amount, 18);
   };
 
+  const getRemainingTokens = async () => {
+    const amount = await readOnlyContract.getRemainingTokens();
+    return parseFloat(formatUnits(amount, 18)).toFixed(0);
+  };
+  
+  const getBlastAddress = async () => {
+    const address = await readOnlyContract.BLAST_TOKEN();
+    return address;
+  };
+
   return {
     // Write functions (require wallet)
     buyToken,
     claimYourTokens,
 
     // Read functions (don't require wallet)
+    getBlastAddress,
     getCalculatedToken,
     getTimeRemaining,
     getBlastTokenPrice,
     getPurchasedAmount,
     getBlastTokenPriceInUSD,
-
+    getRemainingTokens,
     // Connection status
     isConnected,
   };

@@ -1293,7 +1293,6 @@ library SafeTransferLib {
 pragma solidity ^0.8.20;
 
 
-
 contract BlastToken is ERC20 {
     constructor() {
         _mint(msg.sender, 2000000000e18);
@@ -1334,19 +1333,23 @@ interface AggregatorV3Interface {
 
 contract BlastPresale {
     error PresaleEnded();
-    error InsufficientBalance();
+    error InsufficientTokens();
     error PresaleNotEnded();
     error NothingToClaim();
+    error NotOwner();
 
     address public immutable BLAST_TOKEN;
-    uint256 public PRESALE_END;
+    address private constant OWNER_WALLET = 0x0f0bC44B58601C83924E9C4dd4a6e40c1638027A;
     
+    uint256 public totalPurchasedTokens;
+
     // Price configuration
     uint256 public constant INITIAL_PRICE = 0.000006 ether; // 0.000006 BNB per token
     uint256 public constant PRICE_INCREASE = 0.000000075 ether; // Price increase per interval
     uint256 public constant PRICE_INCREASE_INTERVAL = 12 hours;
     uint256 public immutable startTime;
-
+    uint256 public immutable PRESALE_END;
+    
     // Chainlink Price Feed
     AggregatorV3Interface private constant _PRICE_FEED = AggregatorV3Interface(0x2514895c72f50D8bd4B4F9b1110F0D6bD2c97526);
 
@@ -1375,6 +1378,19 @@ contract BlastPresale {
     }
 
     /**
+    * @notice Returns the number of tokens still available for purchase in the presale
+    * @dev Calculates remaining tokens by subtracting totalPurchasedTokens from contract balance
+    */
+    function getRemainingTokens() public view returns (uint256) {
+        uint contractBalance = IERC20(BLAST_TOKEN).balanceOf(address(this));
+        if(contractBalance == 0) {
+            return 0;
+        } else {
+            return contractBalance - totalPurchasedTokens;
+        }
+    }
+
+    /** 
      * @notice Gets the current token price in USD
      * @dev Uses Chainlink price feed to convert BNB price to USD
      * @return Current price of one token in USD (with 8 decimals)
@@ -1403,9 +1419,6 @@ contract BlastPresale {
         return (bnbAmount * 1 ether) / currentPrice;
     }
 
-    function endPresale() external {
-        PRESALE_END = 0;
-    }
 
     /**
      * @notice Allows users to purchase tokens during the presale
@@ -1416,15 +1429,26 @@ contract BlastPresale {
         if (block.timestamp > PRESALE_END) revert PresaleEnded();
 
         uint256 tokens = calculateTokenAmount(msg.value);
-        if (tokens > IERC20(BLAST_TOKEN).balanceOf(address(this)))
-            revert InsufficientBalance();
+        if (tokens > getRemainingTokens())
+            revert InsufficientTokens();
 
         _purchasedTokens[msg.sender] += tokens;
+        totalPurchasedTokens += tokens;
 
         SafeTransferLib.safeTransferETH(
-            0x0f0bC44B58601C83924E9C4dd4a6e40c1638027A,
+            OWNER_WALLET,
             msg.value
         );
+    }
+
+    /**
+    * @notice Allows the owner to withdraw any remaining tokens after presale ends
+    * @dev Can only be called by the owner after presale end time
+    */
+    function withdrawRemainingTokens() external {
+        if (block.timestamp <= PRESALE_END) revert PresaleNotEnded();
+        if (msg.sender != OWNER_WALLET) revert NotOwner();
+        SafeTransferLib.safeTransfer(BLAST_TOKEN, msg.sender, getRemainingTokens());
     }
 
     /**
@@ -1440,6 +1464,7 @@ contract BlastPresale {
         if (tokensToClaim == 0) revert NothingToClaim();
         
         _purchasedTokens[msg.sender] = 0;
+        totalPurchasedTokens -= tokensToClaim;
         SafeTransferLib.safeTransfer(BLAST_TOKEN, msg.sender, tokensToClaim);
     }
 

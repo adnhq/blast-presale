@@ -1,6 +1,8 @@
+import { AppKitProvider } from "@/components/AppKitProvider";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ArrowRight, Gem, Loader2, Wallet } from "lucide-react";
+import Link from 'next/link';
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import CountdownTimer from "./CountdownTimer";
@@ -11,6 +13,7 @@ export default function BuySection() {
   const [tokenAmount, setTokenAmount] = useState<string>("0");
   const [isHovered, setIsHovered] = useState(false);
   const {
+    getRemainingTokens,
     claimYourTokens,
     isConnected,
     buyToken,
@@ -19,6 +22,7 @@ export default function BuySection() {
     getBlastTokenPriceInUSD,
     getPurchasedAmount,
     getTimeRemaining,
+    getBlastAddress,
   } = useContractFuncs();
   const [isLoading, setIsLoading] = useState(false);
   const [isClaimLoading, setIsClaimLoading] = useState(false);
@@ -27,12 +31,18 @@ export default function BuySection() {
   const [blastPriceInUsd, setBlastPriceInUsd] = useState<string | null>(null);
   const [blastBalance, setBlastBalance] = useState<string | null>(null);
   const [claimable, setClaimable] = useState(false);
+  const [remainingTokens, setRemainingTokens] = useState<string | null>(null);
+  const [blastAddress, setBlastAddress] = useState<string | null>(null);
 
   useEffect(() => {
     async function fetchPrice() {
       const price = await getBlastTokenPrice();
-      const priceInUsd = await getBlastTokenPriceInUSD();
-
+      const priceInUsd = await getBlastTokenPriceInUSD(); 
+      const remTokens = await getRemainingTokens();
+      const bAddress = await getBlastAddress();
+      
+      setBlastAddress(bAddress);
+      setRemainingTokens(remTokens);
       setBlastPrice(price);
       setBlastPriceInUsd(priceInUsd);
       setIsBlastPriceLoading(false);
@@ -52,7 +62,7 @@ export default function BuySection() {
           remainingTime.minutes === 0 &&
           remainingTime.seconds === 0
         ) {
-          setClaimable(true);
+          setClaimable(false);
         }
 
         if (isConnected) {
@@ -68,7 +78,6 @@ export default function BuySection() {
     fetchBalance();
   }, [isConnected]);
 
-  // Debounce logic
   useEffect(() => {
     const delayDebounceFn = setTimeout(async () => {
       if (!inputAmount || Number(inputAmount) < 0) {
@@ -79,20 +88,24 @@ export default function BuySection() {
       const expTokenAmount = await getCalculatedToken(inputAmount);
       const formattedTokenAmount = expTokenAmount.toString();
       setTokenAmount(formattedTokenAmount);
-    }, 300); // 300ms delay
+    }, 300);
 
     return () => clearTimeout(delayDebounceFn);
   }, [inputAmount, isConnected, getCalculatedToken]);
 
   const handleBuy = async () => {
-    if (!isConnected) {
-      toast.error("Please connect your wallet to buy $BLAST tokens.");
-      return;
-    }
-
     try {
       setIsLoading(true);
       await buyToken(inputAmount);
+      const price = await getBlastTokenPrice();
+      const priceInUsd = await getBlastTokenPriceInUSD(); 
+      const remTokens = await getRemainingTokens();
+
+      setRemainingTokens(remTokens);
+      setBlastPrice(price);
+      setBlastPriceInUsd(priceInUsd);
+      setIsBlastPriceLoading(false);
+      
       const balance = await getPurchasedAmount();
       setBlastBalance(balance);
       toast.success(
@@ -131,19 +144,12 @@ export default function BuySection() {
   };
 
   return (
-    <div className="h-full relative group">
-      {/* Animated border container */}
+    <AppKitProvider>
+      <div className="flex flex-col h-full relative group">
       <div className="absolute -inset-[20px] bg-gradient-to-r from-blue-500 to-cyan-500 rounded-sm opacity-75 group-hover:opacity-100 blur transition duration-1000 animate-pulse" />
-
-      {/* Secondary glow for extra effect */}
       <div className="absolute -inset-[20px] bg-gradient-to-r from-cyan-400 to-blue-400 rounded-sm opacity-50 group-hover:opacity-75 blur-md transition duration-1000 animate-pulse-slow" />
-
-      {/* Main content container */}
       <div className="relative h-full bg-gradient-to-b from-black/95 to-black/90 backdrop-blur-xl flex flex-col">
-        {/* Top accent line */}
         <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-400 to-cyan-500" />
-
-        {/* Main content */}
         <div className="relative flex flex-col p-4 md:p-6 h-full">
           <div className="text-center mb-4 md:mb-6 flex-shrink-0">
             <div className="relative inline-block">
@@ -161,10 +167,23 @@ export default function BuySection() {
                 <CountdownTimer />
               </div>
             )}
+          </div>
+
+          {!claimable ? <>
+            <div className="mt-2 md:mt-3 text-lg md:text-lg font-semibold flex items-center justify-center gap-2">
+              <span className="text-white/80">Remaining Tokens: </span>
+              {isBlastPriceLoading ? (
+                <span className="text-white font-bold">
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                </span>
+              ) : (
+                remainingTokens
+              )}
+              {" BLAST"}
+            </div>
 
             <div className="mt-2 md:mt-3 text-sm md:text-base font-semibold flex items-center justify-center gap-2">
               <span className="text-white/80">1 $BLAST = </span>
-
               {isBlastPriceLoading ? (
                 <span className="text-white font-bold">
                   <Loader2 className="w-4 h-4 animate-spin" />
@@ -185,10 +204,10 @@ export default function BuySection() {
                 blastPriceInUsd
               )}
             </div>
-          </div>
-
+          </> : <h2 className="text-center text-xl font-bold mb-8">PRESALE HAS ENDED</h2>}
+          
           <div className="space-y-3 md:space-y-4 flex-1 min-h-0">
-            <div className="flex items-center justify-center space-x-2 mb-3 bg-white/5 rounded-full py-2 px-4">
+            <div className="flex items-center justify-center space-x-2 mb-3 bg-white/5 rounded-lg py-2 px-4">
               <div className="text-MD md:text-sm font-normal text-white">
                 CLAIMABLE BALANCE:{" "}
                 <span className="font-medium">
@@ -200,17 +219,12 @@ export default function BuySection() {
             {isConnected && claimable && (
               <Button
                 className="w-full h-10 md:h-12 text-sm md:text-base font-bold relative overflow-hidden group mb-8 mt-6"
-                disabled={
-                  !isConnected || isLoading || isClaimLoading || !claimable
-                }
+                disabled={isLoading || isClaimLoading || !claimable}
                 onClick={claimTokens}
               >
                 <div className="absolute inset-0 bg-gradient-to-r from-blue-400 to-cyan-500 disabled:from-blue-300 disabled:to-cyan-400 disabled:cursor-not-allowed transition-transform duration-300 group-hover:scale-105" />
                 <div className="relative flex items-center justify-center gap-2">
-                  <Wallet
-                    className={`w-4 h-4 md:w-5 md:h-5 transition-transform duration-300 
-                    `}
-                  />
+                  <Wallet className="w-4 h-4 md:w-5 md:h-5 transition-transform duration-300" />
                   <span className="tracking-wide">
                     {isClaimLoading ? "Claiming..." : "Claim"}
                   </span>
@@ -251,34 +265,47 @@ export default function BuySection() {
                   />
                 </div>
 
-                <Button
-                  className="w-full h-10 md:h-12 text-sm md:text-base font-bold relative overflow-hidden group"
-                  onMouseEnter={() => setIsHovered(true)}
-                  onMouseLeave={() => setIsHovered(false)}
-                  onClick={handleBuy}
-                  disabled={!isConnected || isLoading}
-                >
-                  <div className="absolute inset-0 bg-gradient-to-r from-blue-400 to-cyan-500 disabled:from-blue-300 disabled:to-cyan-400 disabled:cursor-not-allowed transition-transform duration-300 group-hover:scale-105" />
-                  <div className="relative flex items-center justify-center gap-2">
-                    <Wallet
-                      className={`w-4 h-4 md:w-5 md:h-5 transition-transform duration-300 ${
-                        isHovered ? "scale-110" : "scale-100"
-                      }`}
-                    />
-                    <span className="tracking-wide">
-                      {isConnected
-                        ? isLoading
-                          ? "Buying blast..."
-                          : "Buy $BLAST"
-                        : "Connect Wallet"}
-                    </span>
-                  </div>
-                </Button>
+                <div className="w-full h-10 md:h-12 text-sm md:text-base font-bold relative overflow-hidden group">
+                  {isConnected ? (
+                    <Button
+                      className="w-full h-full"
+                      onMouseEnter={() => setIsHovered(true)}
+                      onMouseLeave={() => setIsHovered(false)}
+                      onClick={handleBuy}
+                      disabled={isLoading}
+                    >
+                      <div className="absolute inset-0 bg-gradient-to-r from-blue-400 to-cyan-500 disabled:from-blue-300 disabled:to-cyan-400 disabled:cursor-not-allowed transition-transform duration-300 group-hover:scale-105" />
+                      <div className="relative flex items-center justify-center gap-2">
+                        <Wallet
+                          className={`w-4 h-4 md:w-5 md:h-5 transition-transform duration-300 ${
+                            isHovered ? "scale-110" : "scale-100"
+                          }`}
+                        />
+                        <span className="tracking-wide">
+                          {isLoading ? "Buying blast..." : "Buy $BLAST"}
+                        </span>
+                      </div>
+                    </Button>
+                  ) : (
+                    <appkit-button />
+                  )}
+                </div>
               </>
             )}
           </div>
         </div>
+        <Link target="_blank" href={`https://bscscan.com/address/${blastAddress}`} className="mt-auto mb-4 flex flex-col md:flex-row items-center justify-center gap-2 hover:text-sky-500 hover:underline">
+            <p>$BLAST Token:</p>
+            {isBlastPriceLoading ? (
+                <span className="text-white">
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                </span>
+              ) : (
+                blastAddress
+              )}
+        </Link>
       </div>
     </div>
+    </AppKitProvider>
   );
 }

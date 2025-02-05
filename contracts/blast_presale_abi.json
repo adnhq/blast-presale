@@ -1,12 +1,42 @@
 [
 	{
 		"inputs": [],
-		"name": "decimals",
+		"stateMutability": "nonpayable",
+		"type": "constructor"
+	},
+	{
+		"inputs": [],
+		"name": "InsufficientTokens",
+		"type": "error"
+	},
+	{
+		"inputs": [],
+		"name": "NotOwner",
+		"type": "error"
+	},
+	{
+		"inputs": [],
+		"name": "NothingToClaim",
+		"type": "error"
+	},
+	{
+		"inputs": [],
+		"name": "PresaleEnded",
+		"type": "error"
+	},
+	{
+		"inputs": [],
+		"name": "PresaleNotEnded",
+		"type": "error"
+	},
+	{
+		"inputs": [],
+		"name": "BLAST_TOKEN",
 		"outputs": [
 			{
-				"internalType": "uint8",
+				"internalType": "address",
 				"name": "",
-				"type": "uint8"
+				"type": "address"
 			}
 		],
 		"stateMutability": "view",
@@ -14,12 +44,84 @@
 	},
 	{
 		"inputs": [],
-		"name": "description",
+		"name": "INCREASE_INTERVAL",
 		"outputs": [
 			{
-				"internalType": "string",
+				"internalType": "uint256",
 				"name": "",
-				"type": "string"
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "INITIAL_PRICE",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "buyTokens",
+		"outputs": [],
+		"stateMutability": "payable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "bnbAmount",
+				"type": "uint256"
+			}
+		],
+		"name": "calculateTokenAmount",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "claimTokens",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "getCurrentPrice",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "getCurrentPriceInUSD",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
 			}
 		],
 		"stateMutability": "view",
@@ -28,78 +130,12 @@
 	{
 		"inputs": [
 			{
-				"internalType": "uint80",
-				"name": "_roundId",
-				"type": "uint80"
+				"internalType": "address",
+				"name": "user",
+				"type": "address"
 			}
 		],
-		"name": "getRoundData",
-		"outputs": [
-			{
-				"internalType": "uint80",
-				"name": "roundId",
-				"type": "uint80"
-			},
-			{
-				"internalType": "int256",
-				"name": "answer",
-				"type": "int256"
-			},
-			{
-				"internalType": "uint256",
-				"name": "startedAt",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint256",
-				"name": "updatedAt",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint80",
-				"name": "answeredInRound",
-				"type": "uint80"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "latestRoundData",
-		"outputs": [
-			{
-				"internalType": "uint80",
-				"name": "roundId",
-				"type": "uint80"
-			},
-			{
-				"internalType": "int256",
-				"name": "answer",
-				"type": "int256"
-			},
-			{
-				"internalType": "uint256",
-				"name": "startedAt",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint256",
-				"name": "updatedAt",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint80",
-				"name": "answeredInRound",
-				"type": "uint80"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "version",
+		"name": "getPurchasedAmount",
 		"outputs": [
 			{
 				"internalType": "uint256",
@@ -108,6 +144,117 @@
 			}
 		],
 		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "getRemainingTokens",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "getTimeRemaining",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "presaleEndTimestamp",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "priceIncreaseAmount",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "newEndTimestamp",
+				"type": "uint256"
+			}
+		],
+		"name": "setPresaleEndTime",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "newPriceIncrease",
+				"type": "uint256"
+			}
+		],
+		"name": "setPriceIncrease",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "startTime",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "totalPurchasedTokens",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "withdrawRemainingTokens",
+		"outputs": [],
+		"stateMutability": "nonpayable",
 		"type": "function"
 	}
 ]

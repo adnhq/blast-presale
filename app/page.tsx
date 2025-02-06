@@ -177,7 +177,7 @@ export default function Home() {
         </div>
 
         {/* Content sections with glass morphism effect */}
-        <div className="relative z-10">
+        <div className="relative z-10 mt-20">
           <section
             id="tokenomics"
             className="container mx-auto px-4 py-16 md:py-24"

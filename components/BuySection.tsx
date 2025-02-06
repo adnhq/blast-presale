@@ -303,7 +303,7 @@ export default function BuySection() {
         <Link
           target="_blank"
           href={`https://bscscan.com/address/${blastAddress}`}
-          className="mt-auto mb-4 flex flex-col items-center justify-center gap-2 hover:text-sky-500 hover:underline text-sm"
+          className="mt-auto mb-4 flex flex-col items-center justify-center gap-2 hover:text-sky-500 hover:underline text-xs md:text-sm"
         >
           <p>$BLAST Token:</p>
           {isBlastPriceLoading ? (

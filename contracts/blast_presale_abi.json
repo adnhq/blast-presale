@@ -1,27 +1,6 @@
 [
 	{
 		"inputs": [],
-		"name": "buyTokens",
-		"outputs": [],
-		"stateMutability": "payable",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "claimTokens",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "endPresale",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [],
 		"stateMutability": "nonpayable",
 		"type": "constructor"
 	},
@@ -52,13 +31,6 @@
 	},
 	{
 		"inputs": [],
-		"name": "withdrawRemainingTokens",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [],
 		"name": "BLAST_TOKEN",
 		"outputs": [
 			{
@@ -68,6 +40,39 @@
 			}
 		],
 		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "INCREASE_INTERVAL",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "INITIAL_PRICE",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "buyTokens",
+		"outputs": [],
+		"stateMutability": "payable",
 		"type": "function"
 	},
 	{
@@ -87,6 +92,13 @@
 			}
 		],
 		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "claimTokens",
+		"outputs": [],
+		"stateMutability": "nonpayable",
 		"type": "function"
 	},
 	{
@@ -162,7 +174,7 @@
 	},
 	{
 		"inputs": [],
-		"name": "INITIAL_PRICE",
+		"name": "presaleEndTimestamp",
 		"outputs": [
 			{
 				"internalType": "uint256",
@@ -175,7 +187,7 @@
 	},
 	{
 		"inputs": [],
-		"name": "PRESALE_END",
+		"name": "priceIncreaseAmount",
 		"outputs": [
 			{
 				"internalType": "uint256",
@@ -187,29 +199,29 @@
 		"type": "function"
 	},
 	{
-		"inputs": [],
-		"name": "PRICE_INCREASE",
-		"outputs": [
+		"inputs": [
 			{
 				"internalType": "uint256",
-				"name": "",
+				"name": "newEndTimestamp",
 				"type": "uint256"
 			}
 		],
-		"stateMutability": "view",
+		"name": "setPresaleEndTime",
+		"outputs": [],
+		"stateMutability": "nonpayable",
 		"type": "function"
 	},
 	{
-		"inputs": [],
-		"name": "PRICE_INCREASE_INTERVAL",
-		"outputs": [
+		"inputs": [
 			{
 				"internalType": "uint256",
-				"name": "",
+				"name": "newPriceIncrease",
 				"type": "uint256"
 			}
 		],
-		"stateMutability": "view",
+		"name": "setPriceIncrease",
+		"outputs": [],
+		"stateMutability": "nonpayable",
 		"type": "function"
 	},
 	{
@@ -236,6 +248,13 @@
 			}
 		],
 		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "withdrawRemainingTokens",
+		"outputs": [],
+		"stateMutability": "nonpayable",
 		"type": "function"
 	}
 ]

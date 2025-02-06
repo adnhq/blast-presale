@@ -61,7 +61,7 @@ export default function BuySection() {
           remainingTime.minutes === 0 &&
           remainingTime.seconds === 0
         ) {
-          setClaimable(false);
+          setClaimable(true);
         }
 
         if (isConnected) {
@@ -302,8 +302,8 @@ export default function BuySection() {
         </div>
         <Link
           target="_blank"
-          href={`https://bscscan.com/address/${blastAddress}`}
-          className="mt-auto mb-4 flex flex-col items-center justify-center gap-2 hover:text-sky-500 hover:underline text-xs md:text-sm"
+          href={`https://testnet.bscscan.com/address/${blastAddress}`}
+          className="mt-auto mb-4 flex flex-col items-center justify-center gap-2 hover:text-sky-500 hover:underline text-sm"
         >
           <p>$BLAST Token:</p>
           {isBlastPriceLoading ? (

@@ -1487,4 +1487,19 @@ contract BlastPresale {
     function getPurchasedAmount(address user) public view returns (uint256) {
         return _purchasedTokens[user];
     }
+
+    function getTimeUntilNextPriceIncrease() public view returns (uint256) {
+        if (block.timestamp >= PRESALE_END) {
+            return 0;
+        }
+        
+        uint256 intervalsPassed = (block.timestamp - startTime) / PRICE_INCREASE_INTERVAL;
+        uint256 nextIncreaseTime = startTime + (intervalsPassed + 1) * PRICE_INCREASE_INTERVAL;
+        
+        if (nextIncreaseTime > PRESALE_END) {
+            return 0;
+        } else {
+            return nextIncreaseTime - block.timestamp;
+        }
+    }
 }

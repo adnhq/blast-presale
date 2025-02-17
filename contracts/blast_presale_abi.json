@@ -44,7 +44,7 @@
 	},
 	{
 		"inputs": [],
-		"name": "INCREASE_INTERVAL",
+		"name": "INITIAL_PRICE",
 		"outputs": [
 			{
 				"internalType": "uint256",
@@ -57,7 +57,33 @@
 	},
 	{
 		"inputs": [],
-		"name": "INITIAL_PRICE",
+		"name": "PRESALE_END",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "PRICE_INCREASE",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "PRICE_INCREASE_INTERVAL",
 		"outputs": [
 			{
 				"internalType": "uint256",
@@ -174,7 +200,7 @@
 	},
 	{
 		"inputs": [],
-		"name": "presaleEndTimestamp",
+		"name": "getTimeUntilNextPriceIncrease",
 		"outputs": [
 			{
 				"internalType": "uint256",
@@ -183,45 +209,6 @@
 			}
 		],
 		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "priceIncreaseAmount",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "newEndTimestamp",
-				"type": "uint256"
-			}
-		],
-		"name": "setPresaleEndTime",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "newPriceIncrease",
-				"type": "uint256"
-			}
-		],
-		"name": "setPriceIncrease",
-		"outputs": [],
-		"stateMutability": "nonpayable",
 		"type": "function"
 	},
 	{

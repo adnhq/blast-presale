@@ -131,11 +131,17 @@ export default function useContractFuncs() {
     return address;
   };
 
+
+  const getTimeUntilNextPriceIncrease = async () => {
+    const timeRemainingInSeconds = await readOnlyContract.getTimeUntilNextPriceIncrease();
+    return formatTimeRemaining(timeRemainingInSeconds);
+  };
+
   return {
     // Write functions (require wallet)
     buyToken,
     claimYourTokens,
-
+    getTimeUntilNextPriceIncrease,
     // Read functions (don't require wallet)
     getBlastAddress,
     getCalculatedToken,

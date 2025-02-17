@@ -185,7 +185,7 @@ export default function BuySection() {
                 {" BNB"}
               </div>
 
-              <div className="mt-1 text-sm text-white/60 flex items-center justify-center gap-2">
+              <div className="mt-1 text-sm text-white/80 flex items-center justify-center gap-2">
                 1 $BLAST = $
                 {isBlastPriceLoading ? (
                   <span className="text-white">
@@ -203,8 +203,8 @@ export default function BuySection() {
           )}
 
           <div className="space-y-3 md:space-y-4 flex-1 min-h-0">
-            <div className="flex items-center justify-center space-x-2 mb-3 bg-white/5 rounded-lg py-2 px-4">
-              <div className="text-MD md:text-sm font-normal text-white">
+            <div className="flex items-center justify-center space-x-2 mb-3 bg-white/20 rounded-xl border py-2 mt-2 px-4">
+              <div className="text-MD md:text-sm font-semibold text-white">
                 CLAIMABLE BALANCE:{" "}
                 <span className="font-medium">
                   {blastBalance !== null ? blastBalance : 0} $BLAST

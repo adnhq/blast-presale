@@ -139,7 +139,7 @@ export default function CountdownTimer() {
                   </span>
                 </div>
               </div>
-              <span className="text-[10px] sm:text-xs text-white/60 font-medium uppercase tracking-wider mt-1">
+              <span className="text-[10px] sm:text-xs text-white/90 font-medium uppercase tracking-wider mt-1">
                 {label}
               </span>
             </div>

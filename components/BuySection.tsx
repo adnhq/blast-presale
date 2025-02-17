@@ -136,16 +136,14 @@ export default function BuySection() {
 
   return (
     <div className="flex flex-col h-full relative group">
-      <div className="relative h-full bg-gradient-to-b bg-black/50 backdrop-blur-md flex flex-col rounded-2xl">
-        {/* Background layers */}
-        <div className="absolute inset-0 -z-10" />
-        <div className="absolute inset-0 -z-20" />
-        <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-400 to-cyan-500 rounded-t-2xl"></div>
+      {/* <div className="absolute -inset-[20px] bg-gradient-to-r from-blue-500 to-cyan-500 rounded-sm opacity-75 group-hover:opacity-100 blur transition duration-1000 animate-pulse" />
+      <div className="absolute -inset-[20px] bg-gradient-to-r from-cyan-400 to-blue-400 rounded-sm opacity-50 group-hover:opacity-75 blur-md transition duration-1000 animate-pulse-slow" /> */}
+      <div className="relative h-full bg-gradient-to-b from-black/25 to-black/40 backdrop-blur-sm flex flex-col">
+        <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-400 to-cyan-500" />
         <div className="relative flex flex-col p-4 md:p-6 h-full">
-          {/* Header & Timer */}
           <div className="text-center mb-4 md:mb-6 flex-shrink-0">
             <div className="relative inline-block">
-              <div className="flex items-center justify-center gap-2 mb-4">
+              <div className="flex items-center justify-center gap-2 mb-4 relative">
                 <Gem className="w-5 h-5 md:w-6 md:h-6 text-blue-400 animate-twinkle" />
                 <h2 className="text-xl md:text-2xl font-bold bg-gradient-to-r from-blue-400 to-cyan-500 text-transparent bg-clip-text animate-gradient">
                   BLAST Presale
@@ -153,18 +151,17 @@ export default function BuySection() {
                 <Gem className="w-5 h-5 md:w-6 md:h-6 text-cyan-500 animate-twinkle-delayed" />
               </div>
             </div>
-            {/* Show timer when sale is active */}
+
             {!claimable && (
-              <div className="h-24 sm:h-28 md:h-32 w-full overflow-hidden">
+              <div className="w-full overflow-hidden">
                 <CountdownTimer />
               </div>
             )}
           </div>
 
-          {/* Pricing & Remaining Tokens Info */}
           {!claimable ? (
             <>
-              <div className="mt-2 md:mt-3 text-lg font-semibold flex flex-col 2xl:flex-row items-center justify-center mb-4 2xl:gap-1">
+              <div className="mt-2 md:mt-3 text-lg md:text-lg font-semibold flex flex-col 2xl:flex-row items-center justify-center mb-4 2xl:gap-1">
                 <span className="text-white/80">Remaining Tokens: </span>
                 {isBlastPriceLoading ? (
                   <span className="text-white font-bold">
@@ -176,7 +173,7 @@ export default function BuySection() {
                 {" BLAST"}
               </div>
 
-              <div className="mt-2 md:mt-3 text-sm font-semibold flex items-center justify-center gap-2">
+              <div className="mt-2 md:mt-3 text-sm md:text-base font-semibold flex items-center justify-center gap-2">
                 <span className="text-white/80">1 $BLAST = </span>
                 {isBlastPriceLoading ? (
                   <span className="text-white font-bold">
@@ -189,7 +186,7 @@ export default function BuySection() {
               </div>
 
               <div className="mt-1 text-sm text-white/60 flex items-center justify-center gap-2">
-                1 $BLAST = $ 
+                1 $BLAST = $
                 {isBlastPriceLoading ? (
                   <span className="text-white">
                     <Loader2 className="w-4 h-4 animate-spin" />
@@ -205,10 +202,8 @@ export default function BuySection() {
             </h2>
           )}
 
-          {/* Main Section: Claimable Balance & Purchase/Claim Actions */}
           <div className="space-y-3 md:space-y-4 flex-1 min-h-0">
-            {/* Claimable Balance (using original styling) */}
-            <div className="flex items-center justify-center space-x-2 mb-3 bg-white/5 rounded-xl py-2 px-4">
+            <div className="flex items-center justify-center space-x-2 mb-3 bg-white/5 rounded-lg py-2 px-4">
               <div className="text-MD md:text-sm font-normal text-white">
                 CLAIMABLE BALANCE:{" "}
                 <span className="font-medium">
@@ -219,11 +214,11 @@ export default function BuySection() {
 
             {isConnected && claimable && (
               <Button
-                className="w-full h-10 md:h-12 text-sm md:text-base font-bold relative overflow-hidden group mb-8 mt-6 rounded-xl"
+                className="w-full h-10 md:h-12 text-sm md:text-base font-bold relative overflow-hidden group mb-8 mt-6"
                 disabled={isLoading || isClaimLoading || !claimable}
                 onClick={claimTokens}
               >
-                <div className="absolute inset-0 bg-gradient-to-r from-blue-400 to-cyan-500 transition-transform duration-300 group-hover:scale-105 rounded-xl" />
+                <div className="absolute inset-0 bg-gradient-to-r from-blue-400 to-cyan-500 disabled:from-blue-300 disabled:to-cyan-400 disabled:cursor-not-allowed transition-transform duration-300 group-hover:scale-105" />
                 <div className="relative flex items-center justify-center gap-2">
                   <Wallet className="w-4 h-4 md:w-5 md:h-5 transition-transform duration-300" />
                   <span className="tracking-wide">
@@ -233,7 +228,6 @@ export default function BuySection() {
               </Button>
             )}
 
-            {/* Purchase Section (only when sale is active) */}
             {!claimable && (
               <>
                 <div className="space-y-1">
@@ -244,7 +238,7 @@ export default function BuySection() {
                     type="number"
                     value={inputAmount}
                     onChange={(e) => setInputAmount(e.target.value)}
-                    className="h-10 md:h-12 text-sm md:text-base bg-white/5 border-white/10 focus:border-blue-400 transition-colors duration-300 rounded-xl"
+                    className="h-10 md:h-12 text-sm md:text-base bg-white/5 border-white/10 focus:border-blue-400 transition-colors duration-300"
                     placeholder="0.0"
                   />
                 </div>
@@ -262,7 +256,7 @@ export default function BuySection() {
                   <Input
                     readOnly
                     value={tokenAmount}
-                    className="h-10 md:h-12 text-sm md:text-base bg-white/5 border-white/10 rounded-xl"
+                    className="h-10 md:h-12 text-sm md:text-base bg-white/5 border-white/10"
                     placeholder="0.0"
                   />
                 </div>
@@ -270,13 +264,13 @@ export default function BuySection() {
                 <div className="w-full h-10 md:h-12 text-sm md:text-base font-bold relative overflow-hidden group">
                   {isConnected ? (
                     <Button
-                      className="w-full h-full rounded-xl"
+                      className="w-full h-full"
                       onMouseEnter={() => setIsHovered(true)}
                       onMouseLeave={() => setIsHovered(false)}
                       onClick={handleBuy}
                       disabled={isLoading}
                     >
-                      <div className="absolute inset-0 bg-gradient-to-r from-blue-400 to-cyan-500 transition-transform duration-300 group-hover:scale-105 rounded-xl" />
+                      <div className="absolute inset-0 bg-gradient-to-r from-blue-400 to-cyan-500 disabled:from-blue-300 disabled:to-cyan-400 disabled:cursor-not-allowed transition-transform duration-300 group-hover:scale-105" />
                       <div className="relative flex items-center justify-center gap-2">
                         <Wallet
                           className={`w-4 h-4 md:w-5 md:h-5 transition-transform duration-300 ${

@@ -97,6 +97,9 @@ export default function Home() {
               >
                 Roadmap
               </a>
+              <a href="https://www.gitbook.com/" target="_blank" className="hover:text-blue-400 transition-colors">
+                Whitepaper
+              </a>
               <a href="#faq" className="hover:text-blue-400 transition-colors">
                 FAQ
               </a>
@@ -133,10 +136,18 @@ export default function Home() {
                 </a>
                 <a
                   href="#roadmap"
+                  target="_blank"
                   className="hover:text-blue-400 transition-colors"
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
                   Roadmap
+                </a>
+                <a
+                  href="https://www.gitbook.com/"
+                  className="hover:text-blue-400 transition-colors"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  Whitepaper
                 </a>
                 <a
                   href="#faq"

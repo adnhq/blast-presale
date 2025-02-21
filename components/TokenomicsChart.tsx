@@ -48,15 +48,11 @@ const COLORS = [
 ];
 
 const data: TokenData[] = [
-  { name: "Presale", value: 25, description: "Public token sale allocation" },
+  { name: "Presale", value: 20, description: "Public token sale allocation" },
   { name: "Marketing", value: 25, description: "Marketing and partnerships" },
-  {
-    name: "Treasury",
-    value: 25,
-    description: "Project development and operations",
-  },
-  { name: "Liquidity", value: 10, description: "DEX liquidity provision" },
-  { name: "Staking", value: 15, description: "Staking rewards for holders" },
+  { name: "Liquidity", value: 20, description: "DEX liquidity provision" },
+  { name: "Staking", value: 30, description: "Staking rewards for holders" },
+  { name: "Exchanges", value: 5, description: "Exchange listings and fees" },
 ];
 
 const CustomTooltip: React.FC<CustomTooltipProps> = ({ active, payload }) => {

@@ -97,7 +97,7 @@ export default function Home() {
               >
                 Roadmap
               </a>
-              <a href="https://www.gitbook.com/" target="_blank" className="hover:text-blue-400 transition-colors">
+              <a href="https://melusi.gitbook.io/blast-whitepaper" target="_blank" className="hover:text-blue-400 transition-colors">
                 Whitepaper
               </a>
               <a href="#faq" className="hover:text-blue-400 transition-colors">
@@ -143,7 +143,7 @@ export default function Home() {
                   Roadmap
                 </a>
                 <a
-                  href="https://www.gitbook.com/"
+                  href="https://melusi.gitbook.io/blast-whitepaper"
                   className="hover:text-blue-400 transition-colors"
                   onClick={() => setIsMobileMenuOpen(false)}
                 >

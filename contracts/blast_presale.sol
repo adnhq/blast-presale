@@ -1339,7 +1339,7 @@ contract BlastPresale {
     error NotOwner();
 
     address public immutable BLAST_TOKEN;
-    address private constant OWNER_WALLET = 0x0f0bC44B58601C83924E9C4dd4a6e40c1638027A;
+    address private immutable OWNER_WALLET;
     
     uint256 public totalPurchasedTokens;
 
@@ -1348,10 +1348,10 @@ contract BlastPresale {
     uint256 public constant PRICE_INCREASE = 0.000000075 ether; // Price increase per interval
     uint256 public constant PRICE_INCREASE_INTERVAL = 12 hours;
     uint256 public immutable startTime;
-    uint256 public immutable PRESALE_END;
+    uint256 public presaleEnd;
     
     // Chainlink Price Feed
-    AggregatorV3Interface private constant _PRICE_FEED = AggregatorV3Interface(0x2514895c72f50D8bd4B4F9b1110F0D6bD2c97526);
+    AggregatorV3Interface private constant _PRICE_FEED = AggregatorV3Interface(0x0567F2323251f0Aab15c8dFb1967E4e8A7D42aeE);
 
     // Private mapping to track purchased tokens
     mapping(address => uint256) private _purchasedTokens;
@@ -1362,7 +1362,8 @@ contract BlastPresale {
      */
     constructor() {
         startTime = block.timestamp;
-        PRESALE_END = startTime + 60 days;
+        OWNER_WALLET = msg.sender;
+        presaleEnd = startTime + 60 days;
         BLAST_TOKEN = address(new BlastToken());
     }
 
@@ -1426,7 +1427,7 @@ contract BlastPresale {
      * @custom:warning Does not transfer tokens immediately, must be claimed after presale
      */
     function buyTokens() external payable {
-        if (block.timestamp > PRESALE_END) revert PresaleEnded();
+        if (block.timestamp > presaleEnd) revert PresaleEnded();
 
         uint256 tokens = calculateTokenAmount(msg.value);
         if (tokens > getRemainingTokens())
@@ -1446,7 +1447,7 @@ contract BlastPresale {
     * @dev Can only be called by the owner after presale end time
     */
     function withdrawRemainingTokens() external {
-        if (block.timestamp <= PRESALE_END) revert PresaleNotEnded();
+        if (block.timestamp <= presaleEnd) revert PresaleNotEnded();
         if (msg.sender != OWNER_WALLET) revert NotOwner();
         SafeTransferLib.safeTransfer(BLAST_TOKEN, msg.sender, getRemainingTokens());
     }
@@ -1458,7 +1459,7 @@ contract BlastPresale {
      * @custom:requirements User must have tokens to claim
      */
     function claimTokens() external {
-        if (block.timestamp <= PRESALE_END) revert PresaleNotEnded();
+        if (block.timestamp <= presaleEnd) revert PresaleNotEnded();
         
         uint256 tokensToClaim = _purchasedTokens[msg.sender];
         if (tokensToClaim == 0) revert NothingToClaim();
@@ -1474,8 +1475,17 @@ contract BlastPresale {
      * @return Time remaining in seconds
      */
     function getTimeRemaining() public view returns (uint256) {
-        if (block.timestamp >= PRESALE_END) return 0;
-        return PRESALE_END - block.timestamp;
+        if (block.timestamp >= presaleEnd) return 0;
+        return presaleEnd - block.timestamp;
+    }
+
+    /**
+     * @notice Extend presale time.
+     */
+    function extendPresale(uint secondsToAdd) external {
+        if (msg.sender != OWNER_WALLET) revert NotOwner();
+        if (block.timestamp > presaleEnd) revert PresaleEnded();
+        presaleEnd += secondsToAdd;
     }
 
     /**
@@ -1489,14 +1499,14 @@ contract BlastPresale {
     }
 
     function getTimeUntilNextPriceIncrease() public view returns (uint256) {
-        if (block.timestamp >= PRESALE_END) {
+        if (block.timestamp >= presaleEnd) {
             return 0;
         }
         
         uint256 intervalsPassed = (block.timestamp - startTime) / PRICE_INCREASE_INTERVAL;
         uint256 nextIncreaseTime = startTime + (intervalsPassed + 1) * PRICE_INCREASE_INTERVAL;
         
-        if (nextIncreaseTime > PRESALE_END) {
+        if (nextIncreaseTime > presaleEnd) {
             return 0;
         } else {
             return nextIncreaseTime - block.timestamp;
